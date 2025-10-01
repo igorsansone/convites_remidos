@@ -878,6 +878,24 @@
               <textarea id="mensagemPersonalizada" placeholder="Digite uma mensagem especial (opcional)"></textarea>
             </div>
 
+            <h3 class="section-title">Editor de Conteúdo Avançado</h3>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="modoEdicaoAvancada" style="width: auto; margin-right: 8px;">
+                Habilitar edição avançada (permite editar todo o conteúdo do convite com formatação rica)
+              </label>
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                Quando habilitado, você poderá editar todo o texto do convite diretamente no editor abaixo, com negrito, itálico, listas e muito mais.
+              </small>
+            </div>
+
+            <div id="editorAvancadoContainer" style="display: none; margin-top: 15px;">
+              <div class="form-group">
+                <label>Editor de Texto Enriquecido:</label>
+                <div id="editorConteudo" style="background: white; min-height: 300px; border: 1px solid #e0e0e0; border-radius: 8px;"></div>
+              </div>
+            </div>
+
             <h3 class="section-title">Opções Adicionais</h3>
 
             <div class="form-group">
@@ -1123,6 +1141,10 @@
     </div>
   </div>
 
+  <!-- Quill.js for Rich Text Editor -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1170,6 +1192,77 @@
     const previewContent = document.getElementById('previewContent');
     const previewContainer = document.getElementById('previewContainer');
     const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+    // Rich Text Editor (Quill)
+    let quillEditor = null;
+    let modoEdicaoAvancadaAtivo = false;
+    const modoEdicaoAvancadaCheckbox = document.getElementById('modoEdicaoAvancada');
+    const editorAvancadoContainer = document.getElementById('editorAvancadoContainer');
+
+    // Initialize Quill editor
+    function initQuillEditor() {
+      if (!quillEditor) {
+        quillEditor = new Quill('#editorConteudo', {
+          theme: 'snow',
+          modules: {
+            toolbar: [
+              [{ 'header': [1, 2, 3, false] }],
+              ['bold', 'italic', 'underline'],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              [{ 'align': [] }],
+              ['clean']
+            ]
+          },
+          placeholder: 'Digite o conteúdo completo do convite aqui...'
+        });
+        
+        // Update preview when editor content changes
+        quillEditor.on('text-change', function() {
+          if (modoEdicaoAvancadaAtivo) {
+            atualizarPrevia();
+          }
+        });
+      }
+    }
+
+    // Toggle advanced editing mode
+    modoEdicaoAvancadaCheckbox.addEventListener('change', function() {
+      modoEdicaoAvancadaAtivo = this.checked;
+      
+      if (modoEdicaoAvancadaAtivo) {
+        // Show editor
+        editorAvancadoContainer.style.display = 'block';
+        
+        // Initialize editor if not already done
+        initQuillEditor();
+        
+        // Load current preview content into editor
+        const currentContent = previewContent.innerHTML;
+        quillEditor.root.innerHTML = currentContent;
+        
+        // Disable individual form fields
+        nomeConvidadoInput.disabled = true;
+        dataEventoInput.disabled = true;
+        localEventoInput.disabled = true;
+        horarioEventoInput.disabled = true;
+        mensagemPersonalizadaInput.disabled = true;
+        textoModeloSelect.disabled = true;
+      } else {
+        // Hide editor
+        editorAvancadoContainer.style.display = 'none';
+        
+        // Enable individual form fields
+        nomeConvidadoInput.disabled = false;
+        dataEventoInput.disabled = false;
+        localEventoInput.disabled = false;
+        horarioEventoInput.disabled = false;
+        mensagemPersonalizadaInput.disabled = false;
+        textoModeloSelect.disabled = false;
+        
+        // Update preview from form fields
+        atualizarPrevia();
+      }
+    });
 
     // Modelos de texto para convites
     const textosModelos = {
@@ -1329,6 +1422,13 @@
 
     // Função para atualizar a prévia
     function atualizarPrevia() {
+      // If advanced editing mode is active, use Quill editor content
+      if (modoEdicaoAvancadaAtivo && quillEditor) {
+        previewContent.innerHTML = quillEditor.root.innerHTML;
+        return;
+      }
+
+      // Normal mode: use form fields
       const nome = nomeConvidadoInput.value.trim();
       const data = dataEventoInput.value.trim();
       const local = localEventoInput.value.trim();
