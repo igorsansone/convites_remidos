@@ -11,7 +11,7 @@
     
     body {
       background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
-      font-family: 'Inter', 'Roboto', sans-serif;
+      font-family: 'Cormorant Garamond', 'Playfair Display', 'Inter', 'Roboto', serif;
       color: #2c3e50;
       margin: 0;
       padding: 0;
@@ -365,17 +365,38 @@
       margin-bottom: 30px;
     }
 
+    .header .logo-dual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    .header .logo-dual img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+    }
+
+    .header .logo-dual .divider {
+      width: 2px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, #d4af37, transparent);
+    }
+
     .header img {
       width: 80px;
       margin-bottom: 15px;
     }
 
     .header h1 {
-      font-size: 2.2em;
+      font-size: 2.5em;
       color: #1a237e;
       margin: 0 0 10px 0;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      font-family: 'Playfair Display', serif;
     }
 
     .template-modern .header h1 {
@@ -401,10 +422,12 @@
     }
 
     .content {
-      font-size: 1.1em;
-      line-height: 1.8;
+      font-size: 1.15em;
+      line-height: 2;
       color: #2c3e50;
       margin-bottom: 30px;
+      text-align: justify;
+      font-family: 'Cormorant Garamond', serif;
     }
 
     .content strong {
@@ -567,8 +590,8 @@
       }
     }
   </style>
-  <!-- Fonte moderna do Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Fontes elegantes do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Welcome Screen -->
@@ -633,6 +656,18 @@
             <h3 class="section-title">Dados do Convite</h3>
             
             <div class="form-group">
+              <label for="textoModelo">Modelo de Texto:</label>
+              <select id="textoModelo">
+                <option value="padrao">Modelo Padrão</option>
+                <option value="cientifico">Prêmio Científico – CD Antônio Augusto Pretto</option>
+                <option value="politico">Prêmio Político – CD Jair Soares</option>
+                <option value="social">Prêmio Social – CD Flávio Antônio Luce</option>
+                <option value="autoridades">Modelo para Autoridades</option>
+                <option value="remidos">Modelo Remidos</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label for="tipoEvento">Tipo de Evento:</label>
               <select id="tipoEvento">
                 <option value="solenidade">Solenidade</option>
@@ -669,6 +704,14 @@
 
             <h3 class="section-title">Opções Adicionais</h3>
 
+            <div class="form-group">
+              <label for="excelFile">Importar dados do Excel:</label>
+              <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="padding: 8px; background: white;">
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                Aceita arquivos .xlsx, .xls e .csv. O arquivo deve conter colunas: Nome, Data, Local, Horário
+              </small>
+            </div>
+
             <div class="checkbox-group">
               <input type="checkbox" id="incluirQRCode">
               <label for="incluirQRCode">Incluir QR Code para confirmação de presença</label>
@@ -686,11 +729,15 @@
           <h2 class="preview-title">Prévia do Convite</h2>
           <div class="convite-container template-formal" id="previewContainer">
             <div class="header">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Símbolo Odontologia">
+              <div class="logo-dual">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" alt="Brasão da República">
+                <div class="divider"></div>
+                <img src="https://crors.org.br/wp-content/uploads/2024/01/cropped-Logo-oficial-CRO-32x32.png" alt="Logo CRO/RS" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png'">
+              </div>
               <h1 id="previewTitulo">Convite Formal</h1>
               <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
             </div>
-            <div class="content">
+            <div class="content" id="previewContent">
               <span>É com grande honra que convidamos </span>
               <strong><span id="previewNome" class="placeholder">[Nome do Convidado]</span></strong>
               <span> para o evento especial promovido pelo CRO/RS.</span><br>
@@ -731,6 +778,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
     // Show/Hide screens
     function showEditor() {
@@ -745,6 +793,8 @@
     const horarioEventoInput = document.getElementById('horarioEvento');
     const mensagemPersonalizadaInput = document.getElementById('mensagemPersonalizada');
     const tipoEventoSelect = document.getElementById('tipoEvento');
+    const textoModeloSelect = document.getElementById('textoModelo');
+    const excelFileInput = document.getElementById('excelFile');
     const incluirQRCodeCheckbox = document.getElementById('incluirQRCode');
     const linkConfirmacaoInput = document.getElementById('linkConfirmacao');
 
@@ -755,8 +805,119 @@
     const previewHorario = document.getElementById('previewHorario');
     const previewMensagem = document.getElementById('previewMensagem');
     const previewTitulo = document.getElementById('previewTitulo');
+    const previewContent = document.getElementById('previewContent');
     const previewContainer = document.getElementById('previewContainer');
     const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+    // Modelos de texto para convites
+    const textosModelos = {
+      padrao: {
+        titulo: 'Convite',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>É com grande honra que convidamos </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome do Convidado]'}</span></strong>
+          <span> para o evento especial promovido pelo CRO/RS.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
+        `
+      },
+      cientifico: {
+        titulo: 'Prêmio Científico – CD Antônio Augusto Pretto',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>O Conselho Regional de Odontologia do Rio Grande do Sul - CRO/RS tem a honra de convidar </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome do Convidado]'}</span></strong>
+          <span> para a cerimônia de entrega do </span><strong>Prêmio Científico – CD Antônio Augusto Pretto</strong><span>.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          Este prêmio homenageia profissionais que se destacaram na pesquisa e desenvolvimento científico da Odontologia, 
+          contribuindo significativamente para o avanço da profissão.<br>
+          <br>
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Sua presença é muito importante para abrilhantar este momento de reconhecimento e celebração da excelência científica na Odontologia gaúcha.<br>
+        `
+      },
+      politico: {
+        titulo: 'Prêmio Político – CD Jair Soares',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>O Conselho Regional de Odontologia do Rio Grande do Sul - CRO/RS tem a satisfação de convidar </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome do Convidado]'}</span></strong>
+          <span> para a cerimônia de entrega do </span><strong>Prêmio Político – CD Jair Soares</strong><span>.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          Este prêmio reconhece profissionais que se destacaram na atuação política em defesa da Odontologia e dos direitos 
+          da classe, fortalecendo a representatividade da profissão perante a sociedade e os órgãos públicos.<br>
+          <br>
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Contamos com sua valorizada presença neste momento de reconhecimento ao engajamento político em prol da Odontologia.<br>
+        `
+      },
+      social: {
+        titulo: 'Prêmio Social – CD Flávio Antônio Luce',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>O Conselho Regional de Odontologia do Rio Grande do Sul - CRO/RS tem a alegria de convidar </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome do Convidado]'}</span></strong>
+          <span> para a cerimônia de entrega do </span><strong>Prêmio Social – CD Flávio Antônio Luce</strong><span>.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          Este prêmio homenageia profissionais que se destacaram em ações sociais e projetos voltados para o bem-estar 
+          da comunidade, levando saúde bucal e dignidade a quem mais precisa.<br>
+          <br>
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Sua presença será uma honra neste momento de celebração da solidariedade e do compromisso social da Odontologia gaúcha.<br>
+        `
+      },
+      autoridades: {
+        titulo: 'Convite Especial',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>O Conselho Regional de Odontologia do Rio Grande do Sul - CRO/RS, em nome de sua diretoria e de toda a classe odontológica gaúcha, 
+          tem a alta honra de convidar </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome da Autoridade]'}</span></strong>
+          <span> para participar de nossa cerimônia solene.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          Será um momento de grande importância para a Odontologia do Rio Grande do Sul, e a presença de Vossa Excelência 
+          engrandecerá ainda mais esta ocasião.<br>
+          <br>
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Respeitosamente, aguardamos sua confirmação de presença.<br>
+        `
+      },
+      remidos: {
+        titulo: 'Homenagem aos Remidos',
+        conteudo: (nome, data, local, horario, mensagem) => `
+          <span>O Conselho Regional de Odontologia do Rio Grande do Sul - CRO/RS tem o privilégio de convidar </span>
+          <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[Nome do Convidado]'}</span></strong>
+          <span> para a </span><strong>Cerimônia de Homenagem aos Remidos</strong><span>.</span><br>
+          <br>
+          ${mensagem ? mensagem + '<br><br>' : ''}
+          Este é um momento especial para homenagear os cirurgiões-dentistas que, com dedicação e compromisso, 
+          construíram uma carreira exemplar e contribuíram significativamente para o desenvolvimento da Odontologia em nosso Estado.<br>
+          <br>
+          <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '[Data do evento]'}</span><br>
+          <strong>Local:</strong> <span class="${local ? '' : 'placeholder'}">${local || '[Local do evento]'}</span><br>
+          <strong>Horário:</strong> <span class="${horario ? '' : 'placeholder'}">${horario || '[Horário]'}</span><br>
+          <br>
+          Sua presença é fundamental para celebrar esta trajetória de dedicação e excelência profissional.<br>
+        `
+      }
+    };
 
     // Template selection
     const templateOptions = document.querySelectorAll('.template-option');
@@ -787,50 +948,78 @@
 
     // Função para atualizar a prévia
     function atualizarPrevia() {
-      // Atualizar nome
-      if (nomeConvidadoInput.value.trim()) {
-        previewNome.textContent = nomeConvidadoInput.value;
-        previewNome.classList.remove('placeholder');
-      } else {
-        previewNome.textContent = '[Nome do Convidado]';
-        previewNome.classList.add('placeholder');
-      }
+      const nome = nomeConvidadoInput.value.trim();
+      const data = dataEventoInput.value.trim();
+      const local = localEventoInput.value.trim();
+      const horario = horarioEventoInput.value.trim();
+      const mensagem = mensagemPersonalizadaInput.value.trim();
+      const modeloTexto = textoModeloSelect.value;
 
-      // Atualizar data
-      if (dataEventoInput.value.trim()) {
-        previewData.textContent = dataEventoInput.value;
-        previewData.classList.remove('placeholder');
-      } else {
-        previewData.textContent = '[Data do evento]';
-        previewData.classList.add('placeholder');
-      }
+      // Atualizar título baseado no modelo de texto
+      const modelo = textosModelos[modeloTexto];
+      previewTitulo.textContent = modelo.titulo;
 
-      // Atualizar local
-      if (localEventoInput.value.trim()) {
-        previewLocal.textContent = localEventoInput.value;
-        previewLocal.classList.remove('placeholder');
-      } else {
-        previewLocal.textContent = '[Local do evento]';
-        previewLocal.classList.add('placeholder');
-      }
-
-      // Atualizar horário
-      if (horarioEventoInput.value.trim()) {
-        previewHorario.textContent = horarioEventoInput.value;
-        previewHorario.classList.remove('placeholder');
-      } else {
-        previewHorario.textContent = '[Horário]';
-        previewHorario.classList.add('placeholder');
-      }
-
-      // Atualizar mensagem personalizada (se fornecida)
-      if (mensagemPersonalizadaInput.value.trim()) {
-        previewMensagem.innerHTML = mensagemPersonalizadaInput.value + '<br><br>';
-        previewMensagem.classList.remove('placeholder');
-      } else {
-        previewMensagem.innerHTML = '';
-      }
+      // Atualizar conteúdo usando o modelo de texto
+      previewContent.innerHTML = modelo.conteudo(nome, data, local, horario, mensagem);
     }
+
+    // Excel Import Functionality
+    excelFileInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          
+          // Get first sheet
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          
+          // Convert to JSON
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          
+          if (jsonData.length > 0) {
+            const firstRow = jsonData[0];
+            
+            // Try to find columns with common names (case insensitive)
+            const findColumn = (row, possibleNames) => {
+              for (let key in row) {
+                if (possibleNames.some(name => key.toLowerCase().includes(name.toLowerCase()))) {
+                  return row[key];
+                }
+              }
+              return '';
+            };
+            
+            // Auto-fill form fields
+            const nome = findColumn(firstRow, ['nome', 'name', 'convidado']);
+            const data = findColumn(firstRow, ['data', 'date', 'dia']);
+            const local = findColumn(firstRow, ['local', 'lugar', 'location', 'endereço', 'endereco']);
+            const horario = findColumn(firstRow, ['horário', 'horario', 'hora', 'time']);
+            
+            if (nome) nomeConvidadoInput.value = nome;
+            if (data) dataEventoInput.value = data;
+            if (local) localEventoInput.value = local;
+            if (horario) horarioEventoInput.value = horario;
+            
+            // Update preview
+            atualizarPrevia();
+            
+            alert('Dados importados com sucesso! Primeira linha do arquivo foi carregada.');
+          } else {
+            alert('O arquivo Excel está vazio.');
+          }
+        } catch (error) {
+          console.error('Erro ao processar arquivo:', error);
+          alert('Erro ao processar arquivo Excel. Verifique se o formato está correto.');
+        }
+      };
+      
+      reader.readAsArrayBuffer(file);
+    });
 
     // QR Code functionality
     incluirQRCodeCheckbox.addEventListener('change', function() {
@@ -971,6 +1160,7 @@
     horarioEventoInput.addEventListener('input', atualizarPrevia);
     mensagemPersonalizadaInput.addEventListener('input', atualizarPrevia);
     tipoEventoSelect.addEventListener('change', atualizarPrevia);
+    textoModeloSelect.addEventListener('change', atualizarPrevia);
 
     // Inicializar prévia
     atualizarPrevia();
