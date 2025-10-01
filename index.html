@@ -403,6 +403,21 @@
       box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
     }
 
+    .header .logo-single {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 10px;
+    }
+
+    .header .logo-single img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
     .header img {
       width: 80px;
       margin-bottom: 15px;
@@ -617,7 +632,7 @@
   <!-- Welcome Screen -->
   <div class="welcome-screen" id="welcomeScreen">
     <div class="logo-container">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Logo CRO/RS">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" alt="Brasão da República" crossorigin="anonymous">
     </div>
     <h1 class="welcome-title">Gerador de Convites CRO/RS</h1>
     <p class="welcome-subtitle">Sistema Profissional de Geração de Convites</p>
@@ -633,7 +648,7 @@
     <div class="header-bar">
       <div class="container">
         <div class="brand">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Logo CRO/RS">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" alt="Brasão da República" crossorigin="anonymous">
           <div class="brand-text">
             <h1>Gerador de Convites</h1>
             <p>CRO/RS</p>
@@ -751,16 +766,11 @@
           <h2 class="preview-title">Prévia do Convite</h2>
           <div class="convite-container template-formal" id="previewContainer">
             <div class="header">
-              <div class="logo-dual">
+              <div class="logo-single">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" 
                      alt="Brasão da República" 
                      crossorigin="anonymous"
                      onerror="this.style.display='none'">
-                <div class="divider"></div>
-                <img src="https://crors.org.br/wp-content/uploads/2024/01/cropped-Logo-oficial-CRO-32x32.png" 
-                     alt="Logo CRO/RS" 
-                     crossorigin="anonymous"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png'">
               </div>
               <h1 id="previewTitulo">Convite Formal</h1>
               <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
