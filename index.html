@@ -10,21 +10,138 @@
     }
     
     body {
-      background: #f6fbff;
-      font-family: 'Cormorant Garamond', serif;
-      color: #2a3d4c;
+      background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+      font-family: 'Inter', 'Roboto', sans-serif;
+      color: #2c3e50;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      min-height: 100vh;
     }
 
     .container {
       max-width: 1400px;
       margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Welcome Screen */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .welcome-screen.hidden {
+      display: none;
+    }
+
+    .logo-container {
+      margin-bottom: 40px;
+    }
+
+    .logo-container img {
+      width: 120px;
+      height: 120px;
+      filter: brightness(0) invert(1);
+    }
+
+    .welcome-title {
+      font-size: 3em;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .welcome-subtitle {
+      font-size: 1.5em;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .welcome-description {
+      max-width: 600px;
+      font-size: 1.1em;
+      line-height: 1.8;
+      margin-bottom: 50px;
+      opacity: 0.85;
+    }
+
+    .btn-create {
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: #1a237e;
+      padding: 18px 50px;
+      font-size: 1.3em;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-create:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Editor Screen */
+    .editor-screen {
+      display: none;
+      background: #f5f7fa;
+      min-height: 100vh;
+      padding: 30px 0;
+    }
+
+    .editor-screen.active {
+      display: block;
+    }
+
+    .header-bar {
+      background: white;
+      padding: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .header-bar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .brand-text h1 {
+      font-size: 1.5em;
+      color: #1a237e;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .brand-text p {
+      font-size: 0.9em;
+      color: #d4af37;
+      margin: 0;
     }
 
     .main-title {
       text-align: center;
-      color: #2166ae;
+      color: #1a237e;
       font-size: 2.5em;
       font-weight: 700;
       margin-bottom: 10px;
@@ -33,7 +150,7 @@
 
     .main-subtitle {
       text-align: center;
-      color: #4db6ac;
+      color: #5c6bc0;
       font-size: 1.3em;
       margin-bottom: 40px;
     }
@@ -41,7 +158,7 @@
     .grid-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      gap: 30px;
       align-items: start;
     }
 
@@ -54,17 +171,30 @@
     .form-section {
       background: #fff;
       border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 2px 24px rgba(44, 82, 130, 0.08);
-      border: 2px solid #d4af37;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     .form-section h2 {
-      color: #2166ae;
+      color: #1a237e;
       margin-top: 0;
-      font-size: 1.8em;
+      font-size: 1.6em;
       margin-bottom: 24px;
-      text-align: center;
+      font-weight: 600;
+    }
+
+    .section-title {
+      color: #1a237e;
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e8eaf6;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
     }
 
     .form-group {
@@ -73,28 +203,33 @@
 
     .form-group label {
       display: block;
-      font-weight: 600;
-      color: #2a3d4c;
+      font-weight: 500;
+      color: #37474f;
       margin-bottom: 8px;
-      font-size: 1.1em;
+      font-size: 0.95em;
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       width: 100%;
       padding: 12px 16px;
-      border: 2px solid #d4af37;
+      border: 2px solid #e0e0e0;
       border-radius: 8px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05em;
-      color: #2a3d4c;
-      transition: border-color 0.3s;
+      font-family: 'Inter', 'Roboto', sans-serif;
+      font-size: 1em;
+      color: #2c3e50;
+      transition: all 0.3s;
+      background: #fafafa;
     }
 
     .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group textarea:focus,
+    .form-group select:focus {
       outline: none;
-      border-color: #2166ae;
+      border-color: #5c6bc0;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.1);
     }
 
     .form-group textarea {
@@ -102,70 +237,213 @@
       min-height: 100px;
     }
 
+    .form-group select {
+      cursor: pointer;
+    }
+
+    /* Template Selector */
+    .template-selector {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .template-option {
+      border: 3px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      background: white;
+    }
+
+    .template-option:hover {
+      border-color: #5c6bc0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(92, 107, 192, 0.2);
+    }
+
+    .template-option.active {
+      border-color: #1a237e;
+      background: #e8eaf6;
+    }
+
+    .template-option input[type="radio"] {
+      display: none;
+    }
+
+    .template-name {
+      font-weight: 600;
+      color: #1a237e;
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
+    .template-description {
+      font-size: 0.85em;
+      color: #78909c;
+    }
+
+    /* Checkbox Group */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    /* Base Invitation Container */
     .convite-container {
       max-width: 600px;
       margin: 0 auto;
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 2px 24px rgba(44, 82, 130, 0.08);
-      border: 4px solid;
-      border-image: linear-gradient(135deg, #d4af37 40%, #fffbe8 60%, #d4af37 100%) 1;
-      padding: 32px 40px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      padding: 40px;
       position: relative;
     }
 
-    .convite-container:before {
+    /* Formal Template */
+    .convite-container.template-formal {
+      border: 4px solid;
+      border-image: linear-gradient(135deg, #d4af37 40%, #fffbe8 60%, #d4af37 100%) 1;
+    }
+
+    .convite-container.template-formal:before {
       content: "";
       position: absolute;
-      inset: 0;
-      border-radius: 16px;
+      inset: 10px;
+      border-radius: 12px;
       pointer-events: none;
       border: 2px dashed #d4af37;
     }
 
+    /* Modern Template */
+    .convite-container.template-modern {
+      border-left: 8px solid #1a237e;
+      background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+    }
+
+    /* Classic Template */
+    .convite-container.template-classic {
+      border: 3px double #d4af37;
+      background: #fffef9;
+    }
+
+    .convite-container.template-classic:before {
+      content: "";
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      bottom: 15px;
+      border: 1px solid #d4af37;
+      pointer-events: none;
+    }
+
+    /* Minimalist Template */
+    .convite-container.template-minimalist {
+      border: 1px solid #e0e0e0;
+      background: white;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    }
+
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
     }
 
     .header img {
       width: 80px;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .header h1 {
       font-size: 2.2em;
-      color: #2166ae;
-      margin: 0;
+      color: #1a237e;
+      margin: 0 0 10px 0;
       font-weight: 700;
       letter-spacing: 1px;
     }
 
+    .template-modern .header h1 {
+      font-size: 2em;
+      font-weight: 600;
+    }
+
+    .template-minimalist .header h1 {
+      font-size: 1.8em;
+      font-weight: 500;
+    }
+
     .sub-title {
       text-align: center;
-      color: #4db6ac;
-      font-size: 1.25em;
+      color: #5c6bc0;
+      font-size: 1.2em;
       font-weight: 500;
-      margin-bottom: 32px;
+      margin-bottom: 30px;
+    }
+
+    .template-modern .sub-title {
+      color: #d4af37;
     }
 
     .content {
-      font-size: 1.12em;
+      font-size: 1.1em;
       line-height: 1.8;
-      color: #2a3d4c;
-      margin-bottom: 40px;
+      color: #2c3e50;
+      margin-bottom: 30px;
     }
 
     .content strong {
-      color: #2166ae;
+      color: #1a237e;
+      font-weight: 600;
+    }
+
+    .template-modern .content strong {
+      color: #d4af37;
     }
 
     .footer {
       text-align: right;
       color: #d4af37;
       font-size: 1em;
-      font-family: 'Cormorant Garamond', serif;
-      margin-top: 24px;
+      margin-top: 30px;
+      font-weight: 500;
+    }
+
+    .template-minimalist .footer {
+      color: #78909c;
+    }
+
+    .qr-code-container {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .qr-code-container img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 10px;
+    }
+
+    .qr-code-label {
+      font-size: 0.9em;
+      color: #78909c;
     }
 
     .placeholder {
@@ -175,17 +453,103 @@
 
     .preview-title {
       text-align: center;
-      color: #2166ae;
-      font-size: 1.8em;
-      font-weight: 700;
+      color: #1a237e;
+      font-size: 1.6em;
+      font-weight: 600;
       margin-bottom: 24px;
+    }
+
+    /* Action Buttons */
+    .actions-container {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+    }
+
+    .actions-title {
+      color: #1a237e;
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Inter', 'Roboto', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 35, 126, 0.3);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: #1a237e;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-success {
+      background: #43a047;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #388e3c;
+      transform: translateY(-2px);
+    }
+
+    .btn-info {
+      background: #0288d1;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background: #0277bd;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media print {
       .form-section,
       .main-title,
       .main-subtitle,
-      .preview-title {
+      .preview-title,
+      .actions-container,
+      .header-bar {
         display: none;
       }
 
@@ -195,92 +559,231 @@
 
       body {
         padding: 0;
+        background: white;
+      }
+
+      .editor-screen {
+        padding: 0;
       }
     }
   </style>
-  <!-- Fonte elegante do Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,700&display=swap" rel="stylesheet">
+  <!-- Fonte moderna do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1 class="main-title">Gerador de Convites CRO/RS</h1>
-    <p class="main-subtitle">Sistema de Geração de Convites Formais</p>
+  <!-- Welcome Screen -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="logo-container">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Logo CRO/RS">
+    </div>
+    <h1 class="welcome-title">Gerador de Convites CRO/RS</h1>
+    <p class="welcome-subtitle">Sistema Profissional de Geração de Convites</p>
+    <div class="welcome-description">
+      <p>Crie convites personalizados e profissionais para seus eventos do CRO/RS.</p>
+      <p>Escolha entre múltiplos modelos, personalize os detalhes e compartilhe de forma fácil.</p>
+    </div>
+    <button class="btn-create" onclick="showEditor()">Criar Convite</button>
+  </div>
 
-    <div class="grid-container">
-      <!-- Formulário -->
-      <div class="form-section">
-        <h2>Dados do Convite</h2>
-        
-        <div class="form-group">
-          <label for="nomeConvidado">Nome do Convidado:</label>
-          <input type="text" id="nomeConvidado" placeholder="Digite o nome do convidado">
-        </div>
-
-        <div class="form-group">
-          <label for="dataEvento">Data do Evento:</label>
-          <input type="text" id="dataEvento" placeholder="Ex: 15 de dezembro de 2024">
-        </div>
-
-        <div class="form-group">
-          <label for="localEvento">Local do Evento:</label>
-          <input type="text" id="localEvento" placeholder="Digite o local do evento">
-        </div>
-
-        <div class="form-group">
-          <label for="horarioEvento">Horário:</label>
-          <input type="text" id="horarioEvento" placeholder="Ex: 19h00">
-        </div>
-
-        <div class="form-group">
-          <label for="descricaoEvento">Descrição do Evento:</label>
-          <textarea id="descricaoEvento" placeholder="Digite uma descrição personalizada para o evento (opcional)"></textarea>
+  <!-- Editor Screen -->
+  <div class="editor-screen" id="editorScreen">
+    <div class="header-bar">
+      <div class="container">
+        <div class="brand">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Logo CRO/RS">
+          <div class="brand-text">
+            <h1>Gerador de Convites</h1>
+            <p>CRO/RS</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Prévia do Convite -->
-      <div>
-        <h2 class="preview-title">Prévia do Convite</h2>
-        <div class="convite-container">
-          <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Símbolo Odontologia">
-            <h1>Convite Formal</h1>
-            <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
+    <div class="container">
+      <div class="grid-container">
+        <!-- Formulário -->
+        <div>
+          <div class="form-section">
+            <h2>Configuração do Convite</h2>
+            
+            <h3 class="section-title">Modelo do Convite</h3>
+            <div class="template-selector">
+              <label class="template-option active" data-template="formal">
+                <input type="radio" name="template" value="formal" checked>
+                <div class="template-name">Formal</div>
+                <div class="template-description">Elegante e tradicional</div>
+              </label>
+              <label class="template-option" data-template="modern">
+                <input type="radio" name="template" value="modern">
+                <div class="template-name">Moderno</div>
+                <div class="template-description">Limpo e contemporâneo</div>
+              </label>
+              <label class="template-option" data-template="classic">
+                <input type="radio" name="template" value="classic">
+                <div class="template-name">Clássico</div>
+                <div class="template-description">Sofisticado e atemporal</div>
+              </label>
+              <label class="template-option" data-template="minimalist">
+                <input type="radio" name="template" value="minimalist">
+                <div class="template-name">Minimalista</div>
+                <div class="template-description">Simples e direto</div>
+              </label>
+            </div>
+
+            <h3 class="section-title">Dados do Convite</h3>
+            
+            <div class="form-group">
+              <label for="tipoEvento">Tipo de Evento:</label>
+              <select id="tipoEvento">
+                <option value="solenidade">Solenidade</option>
+                <option value="reuniao">Reunião</option>
+                <option value="comemoracao">Comemoração</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="nomeConvidado">Nome do Convidado:</label>
+              <input type="text" id="nomeConvidado" placeholder="Digite o nome do convidado">
+            </div>
+
+            <div class="form-group">
+              <label for="dataEvento">Data do Evento:</label>
+              <input type="text" id="dataEvento" placeholder="Ex: 15 de dezembro de 2024">
+            </div>
+
+            <div class="form-group">
+              <label for="localEvento">Local do Evento:</label>
+              <input type="text" id="localEvento" placeholder="Digite o local do evento">
+            </div>
+
+            <div class="form-group">
+              <label for="horarioEvento">Horário:</label>
+              <input type="text" id="horarioEvento" placeholder="Ex: 19h00">
+            </div>
+
+            <div class="form-group">
+              <label for="mensagemPersonalizada">Mensagem Personalizada:</label>
+              <textarea id="mensagemPersonalizada" placeholder="Digite uma mensagem especial (opcional)"></textarea>
+            </div>
+
+            <h3 class="section-title">Opções Adicionais</h3>
+
+            <div class="checkbox-group">
+              <input type="checkbox" id="incluirQRCode">
+              <label for="incluirQRCode">Incluir QR Code para confirmação de presença</label>
+            </div>
+
+            <div class="form-group" id="linkConfirmacaoGroup" style="display: none; margin-top: 15px;">
+              <label for="linkConfirmacao">Link de Confirmação:</label>
+              <input type="text" id="linkConfirmacao" placeholder="https://exemplo.com/confirmar">
+            </div>
           </div>
-          <div class="content">
-            <span>É com grande honra que convidamos </span>
-            <strong><span id="previewNome" class="placeholder">[Nome do Convidado]</span></strong>
-            <span> para o evento especial promovido pelo CRO/RS.</span><br>
-            <br>
-            <span id="previewDescricao"></span>
-            <strong>Data:</strong> <span id="previewData" class="placeholder">[Data do evento]</span><br>
-            <strong>Local:</strong> <span id="previewLocal" class="placeholder">[Local do evento]</span><br>
-            <strong>Horário:</strong> <span id="previewHorario" class="placeholder">[Horário]</span><br>
-            <br>
-            Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
+        </div>
+
+        <!-- Prévia do Convite -->
+        <div>
+          <h2 class="preview-title">Prévia do Convite</h2>
+          <div class="convite-container template-formal" id="previewContainer">
+            <div class="header">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Símbolo Odontologia">
+              <h1 id="previewTitulo">Convite Formal</h1>
+              <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
+            </div>
+            <div class="content">
+              <span>É com grande honra que convidamos </span>
+              <strong><span id="previewNome" class="placeholder">[Nome do Convidado]</span></strong>
+              <span> para o evento especial promovido pelo CRO/RS.</span><br>
+              <br>
+              <span id="previewMensagem"></span>
+              <strong>Data:</strong> <span id="previewData" class="placeholder">[Data do evento]</span><br>
+              <strong>Local:</strong> <span id="previewLocal" class="placeholder">[Local do evento]</span><br>
+              <strong>Horário:</strong> <span id="previewHorario" class="placeholder">[Horário]</span><br>
+              <br>
+              Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
+            </div>
+            <div class="footer">
+              Atenciosamente,<br>
+              CRO/RS
+            </div>
+            <div class="qr-code-container" id="qrCodeContainer" style="display: none;">
+              <img id="qrCodeImage" src="" alt="QR Code">
+              <div class="qr-code-label">Escaneie para confirmar presença</div>
+            </div>
           </div>
-          <div class="footer">
-            Atenciosamente,<br>
-            CRO/RS
+
+          <!-- Action Buttons -->
+          <div class="actions-container">
+            <h3 class="actions-title">Ações</h3>
+            <div class="action-buttons">
+              <button class="btn btn-primary" onclick="downloadPDF()">📄 Baixar PDF</button>
+              <button class="btn btn-primary" onclick="downloadImage()">🖼️ Baixar Imagem</button>
+              <button class="btn btn-success" onclick="shareWhatsApp()">📱 WhatsApp</button>
+              <button class="btn btn-info" onclick="shareEmail()">📧 E-mail</button>
+              <button class="btn btn-secondary" onclick="printInvite()">🖨️ Imprimir</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
+    // Show/Hide screens
+    function showEditor() {
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('editorScreen').classList.add('active');
+    }
+
     // Elementos do formulário
     const nomeConvidadoInput = document.getElementById('nomeConvidado');
     const dataEventoInput = document.getElementById('dataEvento');
     const localEventoInput = document.getElementById('localEvento');
     const horarioEventoInput = document.getElementById('horarioEvento');
-    const descricaoEventoInput = document.getElementById('descricaoEvento');
+    const mensagemPersonalizadaInput = document.getElementById('mensagemPersonalizada');
+    const tipoEventoSelect = document.getElementById('tipoEvento');
+    const incluirQRCodeCheckbox = document.getElementById('incluirQRCode');
+    const linkConfirmacaoInput = document.getElementById('linkConfirmacao');
 
     // Elementos de prévia
     const previewNome = document.getElementById('previewNome');
     const previewData = document.getElementById('previewData');
     const previewLocal = document.getElementById('previewLocal');
     const previewHorario = document.getElementById('previewHorario');
-    const previewDescricao = document.getElementById('previewDescricao');
+    const previewMensagem = document.getElementById('previewMensagem');
+    const previewTitulo = document.getElementById('previewTitulo');
+    const previewContainer = document.getElementById('previewContainer');
+    const qrCodeContainer = document.getElementById('qrCodeContainer');
+
+    // Template selection
+    const templateOptions = document.querySelectorAll('.template-option');
+    const templateRadios = document.querySelectorAll('input[name="template"]');
+
+    templateOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        templateOptions.forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        this.querySelector('input[type="radio"]').checked = true;
+        updateTemplate();
+      });
+    });
+
+    function updateTemplate() {
+      const selectedTemplate = document.querySelector('input[name="template"]:checked').value;
+      previewContainer.className = 'convite-container template-' + selectedTemplate;
+      
+      // Update title based on template
+      const titles = {
+        'formal': 'Convite Formal',
+        'modern': 'Convite',
+        'classic': 'Convite Especial',
+        'minimalist': 'Convite'
+      };
+      previewTitulo.textContent = titles[selectedTemplate] || 'Convite';
+    }
 
     // Função para atualizar a prévia
     function atualizarPrevia() {
@@ -320,13 +823,145 @@
         previewHorario.classList.add('placeholder');
       }
 
-      // Atualizar descrição (se fornecida)
-      if (descricaoEventoInput.value.trim()) {
-        previewDescricao.innerHTML = descricaoEventoInput.value + '<br><br>';
-        previewDescricao.classList.remove('placeholder');
+      // Atualizar mensagem personalizada (se fornecida)
+      if (mensagemPersonalizadaInput.value.trim()) {
+        previewMensagem.innerHTML = mensagemPersonalizadaInput.value + '<br><br>';
+        previewMensagem.classList.remove('placeholder');
       } else {
-        previewDescricao.innerHTML = '';
+        previewMensagem.innerHTML = '';
       }
+    }
+
+    // QR Code functionality
+    incluirQRCodeCheckbox.addEventListener('change', function() {
+      const linkGroup = document.getElementById('linkConfirmacaoGroup');
+      if (this.checked) {
+        linkGroup.style.display = 'block';
+      } else {
+        linkGroup.style.display = 'none';
+        qrCodeContainer.style.display = 'none';
+      }
+    });
+
+    linkConfirmacaoInput.addEventListener('input', function() {
+      if (incluirQRCodeCheckbox.checked && this.value.trim()) {
+        generateQRCode(this.value);
+        qrCodeContainer.style.display = 'block';
+      } else {
+        qrCodeContainer.style.display = 'none';
+      }
+    });
+
+    let qrCode = null;
+    function generateQRCode(url) {
+      const qrElement = document.getElementById('qrCodeImage');
+      
+      // Clear previous QR code
+      if (qrCode) {
+        qrElement.parentElement.querySelector('#qrcode-temp')?.remove();
+      }
+      
+      // Create temporary container
+      const tempDiv = document.createElement('div');
+      tempDiv.id = 'qrcode-temp';
+      tempDiv.style.display = 'none';
+      document.body.appendChild(tempDiv);
+      
+      // Generate QR code
+      qrCode = new QRCode(tempDiv, {
+        text: url,
+        width: 120,
+        height: 120
+      });
+      
+      // Wait for QR code to be generated and then get the image
+      setTimeout(() => {
+        const img = tempDiv.querySelector('img');
+        if (img) {
+          qrElement.src = img.src;
+        }
+      }, 100);
+    }
+
+    // Action functions
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      
+      html2canvas(previewContainer, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+      }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4'
+        });
+        
+        const imgWidth = 190;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const x = 10;
+        const y = 10;
+        
+        pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight);
+        pdf.save('convite-cro-rs.pdf');
+      });
+    }
+
+    function downloadImage() {
+      html2canvas(previewContainer, {
+        scale: 2,
+        useCORS: true,
+        logging: false
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'convite-cro-rs.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    function shareWhatsApp() {
+      const nome = nomeConvidadoInput.value || '[Nome]';
+      const data = dataEventoInput.value || '[Data]';
+      const local = localEventoInput.value || '[Local]';
+      const horario = horarioEventoInput.value || '[Horário]';
+      const tipoEvento = tipoEventoSelect.options[tipoEventoSelect.selectedIndex].text;
+      
+      const mensagem = `🎉 Convite Especial - CRO/RS 🎉%0A%0A` +
+                      `Convidado: ${nome}%0A` +
+                      `Tipo de Evento: ${tipoEvento}%0A` +
+                      `Data: ${data}%0A` +
+                      `Local: ${local}%0A` +
+                      `Horário: ${horario}%0A%0A` +
+                      `Contamos com sua presença!`;
+      
+      window.open(`https://wa.me/?text=${mensagem}`, '_blank');
+    }
+
+    function shareEmail() {
+      const nome = nomeConvidadoInput.value || '[Nome]';
+      const data = dataEventoInput.value || '[Data]';
+      const local = localEventoInput.value || '[Local]';
+      const horario = horarioEventoInput.value || '[Horário]';
+      const tipoEvento = tipoEventoSelect.options[tipoEventoSelect.selectedIndex].text;
+      
+      const assunto = `Convite: ${tipoEvento} - CRO/RS`;
+      const corpo = `Prezado(a) ${nome},%0A%0A` +
+                   `É com grande honra que convidamos V.Sa. para o evento especial promovido pelo CRO/RS.%0A%0A` +
+                   `Tipo de Evento: ${tipoEvento}%0A` +
+                   `Data: ${data}%0A` +
+                   `Local: ${local}%0A` +
+                   `Horário: ${horario}%0A%0A` +
+                   `Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.%0A%0A` +
+                   `Atenciosamente,%0ACRO/RS`;
+      
+      window.location.href = `mailto:?subject=${assunto}&body=${corpo}`;
+    }
+
+    function printInvite() {
+      window.print();
     }
 
     // Adicionar event listeners para atualização em tempo real
@@ -334,7 +969,8 @@
     dataEventoInput.addEventListener('input', atualizarPrevia);
     localEventoInput.addEventListener('input', atualizarPrevia);
     horarioEventoInput.addEventListener('input', atualizarPrevia);
-    descricaoEventoInput.addEventListener('input', atualizarPrevia);
+    mensagemPersonalizadaInput.addEventListener('input', atualizarPrevia);
+    tipoEventoSelect.addEventListener('change', atualizarPrevia);
 
     // Inicializar prévia
     atualizarPrevia();
