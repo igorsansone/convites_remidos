@@ -1,397 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convite - CRO/RS</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Garamond', 'Georgia', serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-
-        .convite-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            border: 2px solid #003366;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #003366;
-        }
-
-        .logo-left, .logo-right {
-            width: 120px;
-            height: auto;
-        }
-
-        .logo-left img, .logo-right img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .content {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .titulo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #003366;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .texto-convite {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #333;
-            text-align: justify;
-            margin-bottom: 30px;
-            text-indent: 40px;
-        }
-
-        .destinatario {
-            font-size: 22px;
-            font-weight: bold;
-            color: #003366;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .campo-dinamico {
-            color: #0066cc;
-            font-style: italic;
-            border-bottom: 1px dotted #0066cc;
-        }
-
-        .assinatura {
-            margin-top: 60px;
-            text-align: center;
-        }
-
-        .linha-assinatura {
-            width: 300px;
-            margin: 0 auto 10px;
-            border-top: 1px solid #333;
-        }
-
-        .nome-assinatura {
-            font-size: 16px;
-            font-weight: bold;
-            color: #003366;
-        }
-
-        .cargo-assinatura {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #ccc;
-            text-align: center;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Estilos para impressão/PDF */
-        @media print {
-            body {
-                background-color: white;
-                padding: 0;
-            }
-
-            .convite-container {
-                box-shadow: none;
-                border: none;
-                max-width: 100%;
-                padding: 20px;
-            }
-
-            .campo-dinamico {
-                border-bottom: none;
-            }
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .convite-container {
-                padding: 20px;
-            }
-
-            .header {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .logo-left, .logo-right {
-                width: 100px;
-            }
-
-            .titulo {
-                font-size: 22px;
-            }
-
-            .texto-convite {
-                font-size: 16px;
-            }
-
-            .destinatario {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .convite-container {
-                padding: 15px;
-            }
-
-            .logo-left, .logo-right {
-                width: 80px;
-            }
-
-            .titulo {
-                font-size: 18px;
-                letter-spacing: 1px;
-            }
-
-            .texto-convite {
-                font-size: 14px;
-                text-indent: 20px;
-            }
-
-            .destinatario {
-                font-size: 16px;
-            }
-        }
-
-        /* Estilos para controle de template */
-        .template-selector {
-            background-color: #f0f0f0;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .template-selector label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: #003366;
-        }
-
-        .template-selector select,
-        .template-selector input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 14px;
-        }
-
-        .template-selector button {
-            background-color: #003366;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .template-selector button:hover {
-            background-color: #004488;
-        }
-
-        @media print {
-            .template-selector {
-                display: none;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Convite Formal CRO/RS</title>
+  <style>
+    body {
+      background: #f6fbff;
+      font-family: 'Cormorant Garamond', serif;
+      color: #2a3d4c;
+      margin: 0;
+      padding: 0;
+    }
+    .convite-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 24px rgba(44, 82, 130, 0.08);
+      border: 4px solid;
+      border-image: linear-gradient(135deg, #d4af37 40%, #fffbe8 60%, #d4af37 100%) 1;
+      padding: 32px 40px;
+      position: relative;
+    }
+    .convite-container:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      pointer-events: none;
+      border: 2px dashed #d4af37;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header img {
+      width: 80px;
+      margin-bottom: 12px;
+    }
+    .header h1 {
+      font-size: 2.2em;
+      color: #2166ae;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .sub-title {
+      text-align: center;
+      color: #4db6ac;
+      font-size: 1.25em;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+    .content {
+      font-size: 1.12em;
+      line-height: 1.8;
+      color: #2a3d4c;
+      margin-bottom: 40px;
+    }
+    .footer {
+      text-align: right;
+      color: #d4af37;
+      font-size: 1em;
+      font-family: 'Cormorant Garamond', serif;
+      margin-top: 24px;
+    }
+  </style>
+  <!-- Fonte elegante do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Painel de Controle do Template (oculto na impressão) -->
-    <div class="template-selector">
-        <h2 style="margin-bottom: 15px; color: #003366;">Configuração do Convite</h2>
-        
-        <label for="nome-completo">Nome Completo:</label>
-        <input type="text" id="nome-completo" placeholder="Ex: Dr. João da Silva" value="Dr. João da Silva">
-        
-        <label for="numero-cro">Número do CRO:</label>
-        <input type="text" id="numero-cro" placeholder="Ex: CRO/RS 12345" value="CRO/RS 12345">
-        
-        <label for="categoria">Categoria:</label>
-        <select id="categoria">
-            <option value="remidos">Remidos</option>
-            <option value="autoridade">Autoridade</option>
-            <option value="cientifico">Científico</option>
-            <option value="politico">Político</option>
-            <option value="social">Social</option>
-        </select>
-        
-        <button onclick="atualizarConvite()">Atualizar Convite</button>
+  <div class="convite-container">
+    <div class="header">
+      <!-- Você pode inserir um logo ou símbolo odontológico aqui -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Símbolo Odontologia">
+      <h1>Convite Formal</h1>
+      <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
     </div>
-
-    <!-- Convite -->
-    <div class="convite-container">
-        <div class="header">
-            <div class="logo-left">
-                <!-- Logo CRO/RS - Substituir src com URL real da logo -->
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect fill='%23003366' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='16' font-weight='bold' text-anchor='middle' dy='.3em'%3ECRO/RS%3C/text%3E%3C/svg%3E" alt="Logo CRO/RS">
-            </div>
-            <div class="logo-right">
-                <!-- Brasão da República - Substituir src com URL real do brasão -->
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect fill='%23006633' width='120' height='120'/%3E%3Ctext x='50%25' y='50%25' fill='%23FFD700' font-size='14' font-weight='bold' text-anchor='middle' dy='.3em'%3EBrasão%3C/text%3E%3C/svg%3E" alt="Brasão da República">
-            </div>
-        </div>
-
-        <div class="content">
-            <div class="titulo">Convite</div>
-
-            <div class="destinatario">
-                <span class="campo-dinamico" id="nome-display">Dr. João da Silva</span><br>
-                <span class="campo-dinamico" id="cro-display">CRO/RS 12345</span>
-            </div>
-
-            <div class="texto-convite" id="texto-convite">
-                <!-- Texto será inserido dinamicamente baseado na categoria -->
-            </div>
-
-            <div class="assinatura">
-                <div class="linha-assinatura"></div>
-                <div class="nome-assinatura">Presidente do CRO/RS</div>
-                <div class="cargo-assinatura">Conselho Regional de Odontologia do Rio Grande do Sul</div>
-            </div>
-        </div>
-
-        <div class="footer">
-            Conselho Regional de Odontologia do Rio Grande do Sul<br>
-            Endereço • Telefone • Email
-        </div>
+    <div class="content">
+      É com grande honra que convidamos V.Sa. para o evento especial promovido pelo CRO/RS.<br>
+      <br>
+      <strong>Data:</strong> [inserir data]<br>
+      <strong>Local:</strong> [inserir local]<br>
+      <strong>Horário:</strong> [inserir horário]<br>
+      <br>
+      Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
     </div>
-
-    <script>
-        // Textos por categoria
-        const textos = {
-            remidos: "É com grande satisfação que o Conselho Regional de Odontologia do Rio Grande do Sul convida Vossa Senhoria para a cerimônia de entrega do título de CIRURGIÃO-DENTISTA REMIDO, em reconhecimento aos seus 25 anos de efetivo exercício profissional e plena quitação com as obrigações junto ao CRO/RS. A solenidade realizar-se-á no próximo dia [DATA], às [HORA], no [LOCAL]. Contamos com a sua presença neste momento especial de celebração de sua dedicação à Odontologia.",
-            
-            autoridade: "O Conselho Regional de Odontologia do Rio Grande do Sul tem a honra de convidar Vossa Excelência para a cerimônia de [EVENTO], que se realizará no dia [DATA], às [HORA], no [LOCAL]. Sua presença muito nos honrará e contribuirá para o engrandecimento do evento, que representa um marco importante para a Odontologia gaúcha. Agradecemos antecipadamente pela atenção dispensada e esperamos contar com sua ilustre presença.",
-            
-            cientifico: "O Conselho Regional de Odontologia do Rio Grande do Sul tem o prazer de convidar Vossa Senhoria para participar do [EVENTO CIENTÍFICO], que acontecerá no dia [DATA], às [HORA], no [LOCAL]. O evento contará com palestras, debates e apresentações de trabalhos científicos, representando uma importante oportunidade de atualização e intercâmbio de conhecimentos. Contamos com sua prestigiada presença para enriquecer as discussões e contribuir para o avanço da Odontologia.",
-            
-            politico: "O Conselho Regional de Odontologia do Rio Grande do Sul vem, respeitosamente, convidar Vossa Excelência para [EVENTO], a realizar-se no dia [DATA], às [HORA], no [LOCAL]. Sua presença será de fundamental importância para o fortalecimento das relações institucionais e para o debate de temas relevantes à classe odontológica e à sociedade gaúcha. Certos de contar com sua participação, agradecemos antecipadamente.",
-            
-            social: "O Conselho Regional de Odontologia do Rio Grande do Sul convida Vossa Senhoria e família para [EVENTO SOCIAL], que será realizado no dia [DATA], às [HORA], no [LOCAL]. Este será um momento de confraternização entre os profissionais da Odontologia, seus familiares e convidados, fortalecendo os laços de amizade e companheirismo que caracterizam nossa classe. Esperamos contar com sua presença para celebrar juntos."
-        };
-
-        // Função para atualizar o convite
-        function atualizarConvite() {
-            const nome = document.getElementById('nome-completo').value;
-            const cro = document.getElementById('numero-cro').value;
-            const categoria = document.getElementById('categoria').value;
-
-            // Atualizar campos dinâmicos
-            document.getElementById('nome-display').textContent = nome;
-            document.getElementById('cro-display').textContent = cro;
-            
-            // Atualizar texto do convite baseado na categoria
-            document.getElementById('texto-convite').textContent = textos[categoria];
-        }
-
-        // Inicializar com valores padrão
-        window.onload = function() {
-            atualizarConvite();
-        };
-
-        // Função para facilitar impressão/exportação PDF
-        function imprimirConvite() {
-            window.print();
-        }
-
-        // Adicionar botão de impressão via tecla de atalho (Ctrl+P já é padrão)
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'p') {
-                e.preventDefault();
-                imprimirConvite();
-            }
-        });
-    </script>
-
-    <!-- Instruções de Uso (comentadas para referência) -->
-    <!--
-    INSTRUÇÕES DE USO:
-    
-    1. CAMPOS DINÂMICOS:
-       - Nome Completo: Insira o nome do destinatário (ex: Dr. João da Silva)
-       - Número do CRO: Insira o número de registro (ex: CRO/RS 12345)
-       - Categoria: Selecione uma das opções (Remidos, Autoridade, Científico, Político, Social)
-    
-    2. CATEGORIAS DISPONÍVEIS:
-       - Remidos: Para cirurgiões-dentistas com 25 anos de exercício profissional
-       - Autoridade: Para autoridades governamentais e institucionais
-       - Científico: Para eventos acadêmicos e científicos
-       - Político: Para eventos com representantes políticos
-       - Social: Para eventos de confraternização
-    
-    3. SUBSTITUIR LOGOS:
-       - Logo CRO/RS: Substituir o src da imagem na classe "logo-left" com a URL real
-       - Brasão da República: Substituir o src da imagem na classe "logo-right" com a URL real
-    
-    4. PERSONALIZAÇÃO:
-       - Edite os textos no objeto JavaScript "textos" para ajustar as mensagens
-       - Modifique o rodapé com informações de contato atualizadas
-       - Ajuste assinatura com nome e cargo corretos
-    
-    5. EXPORTAR PARA PDF:
-       - Use Ctrl+P ou Cmd+P para abrir a janela de impressão
-       - Selecione "Salvar como PDF" como destino
-       - O painel de controle será automaticamente ocultado na impressão
-    
-    6. INTEGRAÇÃO COM LISTA:
-       - Para importar lista de convidados, use JavaScript para:
-         a) Ler arquivo CSV/JSON com dados (nome, CRO, categoria)
-         b) Gerar múltiplos convites iterando sobre a lista
-         c) Usar bibliotecas como jsPDF ou html2pdf para conversão automática
-    
-    EXEMPLO DE CÓDIGO PARA INTEGRAÇÃO:
-    
-    // Exemplo de dados importados
-    const convidados = [
-        { nome: "Dr. João da Silva", cro: "CRO/RS 12345", categoria: "remidos" },
-        { nome: "Dra. Maria Santos", cro: "CRO/RS 67890", categoria: "autoridade" }
-    ];
-    
-    // Gerar convites
-    convidados.forEach(convidado => {
-        document.getElementById('nome-completo').value = convidado.nome;
-        document.getElementById('numero-cro').value = convidado.cro;
-        document.getElementById('categoria').value = convidado.categoria;
-        atualizarConvite();
-        // Aqui você pode usar jsPDF ou html2pdf para gerar o PDF
-    });
-    -->
+    <div class="footer">
+      Atenciosamente,<br>
+      CRO/RS
+    </div>
+  </div>
 </body>
 </html>
