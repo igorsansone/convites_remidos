@@ -624,6 +624,144 @@
         padding: 0;
       }
     }
+
+    /* Guests Manager Screen Styles */
+    .guests-screen {
+      display: none;
+      background: #f5f7fa;
+      min-height: 100vh;
+      padding: 30px 0;
+    }
+
+    .guests-screen.active {
+      display: block;
+    }
+
+    .tabs-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+      padding: 15px 30px;
+      border: none;
+      background: transparent;
+      color: #5c6bc0;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      font-family: 'Inter', 'Roboto', sans-serif;
+    }
+
+    .tab-btn:hover {
+      background: rgba(92, 107, 192, 0.1);
+    }
+
+    .tab-btn.active {
+      color: #1a237e;
+      border-bottom-color: #1a237e;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .guests-table-container {
+      overflow-x: auto;
+    }
+
+    .guests-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-top: 20px;
+    }
+
+    .guests-table th,
+    .guests-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .guests-table th {
+      background: #1a237e;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+
+    .guests-table tr:hover {
+      background: #f5f7fa;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-sent {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .status-confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-not-confirmed {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      margin: 2px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.3s;
+    }
+
+    .action-btn.edit {
+      background: #5c6bc0;
+      color: white;
+    }
+
+    .action-btn.delete {
+      background: #e57373;
+      color: white;
+    }
+
+    .action-btn:hover {
+      opacity: 0.8;
+    }
+
+    .status-select {
+      padding: 6px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      background: white;
+      font-size: 0.85em;
+    }
   </style>
   <!-- Fontes elegantes do Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -640,7 +778,10 @@
       <p>Crie convites personalizados e profissionais para seus eventos do CRO/RS.</p>
       <p>Escolha entre múltiplos modelos, personalize os detalhes e compartilhe de forma fácil.</p>
     </div>
-    <button class="btn-create" onclick="showEditor()">Criar Convite</button>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+      <button class="btn-create" onclick="showEditor()">Criar Convite</button>
+      <button class="btn-create" onclick="showGuestsManager()">Gerenciar Convidados Especiais</button>
+    </div>
   </div>
 
   <!-- Editor Screen -->
@@ -813,6 +954,175 @@
     </div>
   </div>
 
+  <!-- Guests Manager Screen -->
+  <div class="guests-screen" id="guestsScreen">
+    <div class="header-bar">
+      <div class="container">
+        <div class="brand">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" alt="Brasão da República" crossorigin="anonymous">
+          <div class="brand-text">
+            <h1>Gerenciamento de Convidados Especiais</h1>
+            <p>CRO/RS</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary" onclick="backToWelcome()" style="margin-left: auto;">Voltar</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="tabs-container">
+        <button class="tab-btn active" onclick="showTab('remidos')">Remidos</button>
+        <button class="tab-btn" onclick="showTab('autoridades')">Autoridades</button>
+        <button class="tab-btn" onclick="showTab('honra')">Honra ao Mérito</button>
+      </div>
+
+      <!-- Tab Content: Remidos -->
+      <div id="tab-remidos" class="tab-content active">
+        <div class="form-section">
+          <h2>Cadastro de Remidos</h2>
+          <div class="form-group">
+            <label for="remidosNome">Nome Completo:</label>
+            <input type="text" id="remidosNome" placeholder="Digite o nome completo">
+          </div>
+          <div class="form-group">
+            <label for="remidosCRO">CRO/RS:</label>
+            <input type="text" id="remidosCRO" placeholder="Ex: 12345">
+          </div>
+          <div class="form-group">
+            <label for="remidosEmail">E-mail:</label>
+            <input type="email" id="remidosEmail" placeholder="exemplo@email.com">
+          </div>
+          <div class="form-group">
+            <label for="remidosTelefone">Telefone:</label>
+            <input type="tel" id="remidosTelefone" placeholder="(51) 99999-9999">
+          </div>
+          <button class="btn btn-primary" onclick="addGuest('remidos')">Adicionar Remido</button>
+        </div>
+
+        <div class="form-section" style="margin-top: 30px;">
+          <h2>Lista de Remidos</h2>
+          <div class="guests-table-container">
+            <table class="guests-table" id="remidosTable">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>CRO/RS</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Convite Enviado</th>
+                  <th>Recebimento</th>
+                  <th>Presença</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="remidosTableBody">
+                <!-- Guests will be added here dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Autoridades -->
+      <div id="tab-autoridades" class="tab-content">
+        <div class="form-section">
+          <h2>Cadastro de Autoridades</h2>
+          <div class="form-group">
+            <label for="autoridadesNome">Nome Completo:</label>
+            <input type="text" id="autoridadesNome" placeholder="Digite o nome completo">
+          </div>
+          <div class="form-group">
+            <label for="autoridadesCargo">Cargo/Instituição:</label>
+            <input type="text" id="autoridadesCargo" placeholder="Ex: Prefeito de Porto Alegre">
+          </div>
+          <div class="form-group">
+            <label for="autoridadesEmail">E-mail:</label>
+            <input type="email" id="autoridadesEmail" placeholder="exemplo@email.com">
+          </div>
+          <div class="form-group">
+            <label for="autoridadesTelefone">Telefone:</label>
+            <input type="tel" id="autoridadesTelefone" placeholder="(51) 99999-9999">
+          </div>
+          <button class="btn btn-primary" onclick="addGuest('autoridades')">Adicionar Autoridade</button>
+        </div>
+
+        <div class="form-section" style="margin-top: 30px;">
+          <h2>Lista de Autoridades</h2>
+          <div class="guests-table-container">
+            <table class="guests-table" id="autoridadesTable">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Cargo/Instituição</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Convite Enviado</th>
+                  <th>Recebimento</th>
+                  <th>Presença</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="autoridadesTableBody">
+                <!-- Guests will be added here dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Honra ao Mérito -->
+      <div id="tab-honra" class="tab-content">
+        <div class="form-section">
+          <h2>Cadastro de Honra ao Mérito</h2>
+          <div class="form-group">
+            <label for="honraNome">Nome Completo:</label>
+            <input type="text" id="honraNome" placeholder="Digite o nome completo">
+          </div>
+          <div class="form-group">
+            <label for="honraCategoria">Categoria:</label>
+            <select id="honraCategoria">
+              <option value="cientifico">Científica - CD Antônio Augusto Pretto</option>
+              <option value="politico">Política - CD Jair Soares</option>
+              <option value="social">Social - CD Flávio Antônio Luce</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="honraEmail">E-mail:</label>
+            <input type="email" id="honraEmail" placeholder="exemplo@email.com">
+          </div>
+          <div class="form-group">
+            <label for="honraTelefone">Telefone:</label>
+            <input type="tel" id="honraTelefone" placeholder="(51) 99999-9999">
+          </div>
+          <button class="btn btn-primary" onclick="addGuest('honra')">Adicionar Homenageado</button>
+        </div>
+
+        <div class="form-section" style="margin-top: 30px;">
+          <h2>Lista de Honra ao Mérito</h2>
+          <div class="guests-table-container">
+            <table class="guests-table" id="honraTable">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Categoria</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Convite Enviado</th>
+                  <th>Recebimento</th>
+                  <th>Presença</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="honraTableBody">
+                <!-- Guests will be added here dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -822,6 +1132,20 @@
     function showEditor() {
       document.getElementById('welcomeScreen').classList.add('hidden');
       document.getElementById('editorScreen').classList.add('active');
+      document.getElementById('guestsScreen').classList.remove('active');
+    }
+
+    function showGuestsManager() {
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('editorScreen').classList.remove('active');
+      document.getElementById('guestsScreen').classList.add('active');
+      loadGuests();
+    }
+
+    function backToWelcome() {
+      document.getElementById('welcomeScreen').classList.remove('hidden');
+      document.getElementById('editorScreen').classList.remove('active');
+      document.getElementById('guestsScreen').classList.remove('active');
     }
 
     // Elementos do formulário
@@ -1257,6 +1581,211 @@
 
     // Inicializar prévia
     atualizarPrevia();
+
+    // Guests Management System
+    let guestsData = {
+      remidos: [],
+      autoridades: [],
+      honra: []
+    };
+
+    // Load guests from localStorage
+    function loadGuests() {
+      const stored = localStorage.getItem('cro_guests_data');
+      if (stored) {
+        guestsData = JSON.parse(stored);
+      }
+      renderAllTables();
+    }
+
+    // Save guests to localStorage
+    function saveGuests() {
+      localStorage.setItem('cro_guests_data', JSON.stringify(guestsData));
+    }
+
+    // Tab management
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById('tab-' + tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // Add guest
+    function addGuest(type) {
+      let guest = {};
+      
+      if (type === 'remidos') {
+        const nome = document.getElementById('remidosNome').value.trim();
+        const cro = document.getElementById('remidosCRO').value.trim();
+        const email = document.getElementById('remidosEmail').value.trim();
+        const telefone = document.getElementById('remidosTelefone').value.trim();
+        
+        if (!nome || !cro) {
+          alert('Por favor, preencha o nome e o CRO/RS');
+          return;
+        }
+        
+        guest = { nome, cro, email, telefone, enviado: false, recebido: false, confirmado: false };
+        
+        // Clear form
+        document.getElementById('remidosNome').value = '';
+        document.getElementById('remidosCRO').value = '';
+        document.getElementById('remidosEmail').value = '';
+        document.getElementById('remidosTelefone').value = '';
+      } else if (type === 'autoridades') {
+        const nome = document.getElementById('autoridadesNome').value.trim();
+        const cargo = document.getElementById('autoridadesCargo').value.trim();
+        const email = document.getElementById('autoridadesEmail').value.trim();
+        const telefone = document.getElementById('autoridadesTelefone').value.trim();
+        
+        if (!nome || !cargo) {
+          alert('Por favor, preencha o nome e o cargo');
+          return;
+        }
+        
+        guest = { nome, cargo, email, telefone, enviado: false, recebido: false, confirmado: false };
+        
+        // Clear form
+        document.getElementById('autoridadesNome').value = '';
+        document.getElementById('autoridadesCargo').value = '';
+        document.getElementById('autoridadesEmail').value = '';
+        document.getElementById('autoridadesTelefone').value = '';
+      } else if (type === 'honra') {
+        const nome = document.getElementById('honraNome').value.trim();
+        const categoria = document.getElementById('honraCategoria').value;
+        const email = document.getElementById('honraEmail').value.trim();
+        const telefone = document.getElementById('honraTelefone').value.trim();
+        
+        if (!nome) {
+          alert('Por favor, preencha o nome');
+          return;
+        }
+        
+        guest = { nome, categoria, email, telefone, enviado: false, recebido: false, confirmado: false };
+        
+        // Clear form
+        document.getElementById('honraNome').value = '';
+        document.getElementById('honraEmail').value = '';
+        document.getElementById('honraTelefone').value = '';
+      }
+      
+      guestsData[type].push(guest);
+      saveGuests();
+      renderTable(type);
+    }
+
+    // Delete guest
+    function deleteGuest(type, index) {
+      if (confirm('Tem certeza que deseja remover este convidado?')) {
+        guestsData[type].splice(index, 1);
+        saveGuests();
+        renderTable(type);
+      }
+    }
+
+    // Edit guest
+    function editGuest(type, index) {
+      const guest = guestsData[type][index];
+      
+      if (type === 'remidos') {
+        document.getElementById('remidosNome').value = guest.nome;
+        document.getElementById('remidosCRO').value = guest.cro;
+        document.getElementById('remidosEmail').value = guest.email || '';
+        document.getElementById('remidosTelefone').value = guest.telefone || '';
+      } else if (type === 'autoridades') {
+        document.getElementById('autoridadesNome').value = guest.nome;
+        document.getElementById('autoridadesCargo').value = guest.cargo;
+        document.getElementById('autoridadesEmail').value = guest.email || '';
+        document.getElementById('autoridadesTelefone').value = guest.telefone || '';
+      } else if (type === 'honra') {
+        document.getElementById('honraNome').value = guest.nome;
+        document.getElementById('honraCategoria').value = guest.categoria;
+        document.getElementById('honraEmail').value = guest.email || '';
+        document.getElementById('honraTelefone').value = guest.telefone || '';
+      }
+      
+      deleteGuest(type, index);
+    }
+
+    // Update status
+    function updateStatus(type, index, field, value) {
+      guestsData[type][index][field] = value === 'true';
+      saveGuests();
+      renderTable(type);
+    }
+
+    // Render table
+    function renderTable(type) {
+      const tbody = document.getElementById(type + 'TableBody');
+      tbody.innerHTML = '';
+      
+      guestsData[type].forEach((guest, index) => {
+        const row = document.createElement('tr');
+        
+        let secondColumn = '';
+        if (type === 'remidos') {
+          secondColumn = guest.cro;
+        } else if (type === 'autoridades') {
+          secondColumn = guest.cargo;
+        } else if (type === 'honra') {
+          const categorias = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social'
+          };
+          secondColumn = categorias[guest.categoria] || guest.categoria;
+        }
+        
+        row.innerHTML = `
+          <td>${guest.nome}</td>
+          <td>${secondColumn}</td>
+          <td>${guest.email || '-'}</td>
+          <td>${guest.telefone || '-'}</td>
+          <td>
+            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
+              <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
+              <option value="true" ${guest.enviado ? 'selected' : ''}>Enviado</option>
+            </select>
+          </td>
+          <td>
+            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'recebido', this.value)">
+              <option value="false" ${!guest.recebido ? 'selected' : ''}>Não Confirmado</option>
+              <option value="true" ${guest.recebido ? 'selected' : ''}>Confirmado</option>
+            </select>
+          </td>
+          <td>
+            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'confirmado', this.value)">
+              <option value="false" ${!guest.confirmado ? 'selected' : ''}>Não Confirmado</option>
+              <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
+            </select>
+          </td>
+          <td>
+            <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
+            <button class="action-btn delete" onclick="deleteGuest('${type}', ${index})">Excluir</button>
+          </td>
+        `;
+        
+        tbody.appendChild(row);
+      });
+    }
+
+    // Render all tables
+    function renderAllTables() {
+      renderTable('remidos');
+      renderTable('autoridades');
+      renderTable('honra');
+    }
+
+    // Initialize on load
+    loadGuests();
   </script>
 </body>
 </html>
