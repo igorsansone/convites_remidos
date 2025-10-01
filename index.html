@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Convites - CRO/RS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: #f6fbff;
+      font-family: 'Cormorant Garamond', serif;
+      color: #2a3d4c;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .main-title {
+      text-align: center;
+      color: #2166ae;
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .main-subtitle {
+      text-align: center;
+      color: #4db6ac;
+      font-size: 1.3em;
+      margin-bottom: 40px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 968px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 2px 24px rgba(44, 82, 130, 0.08);
+      border: 2px solid #d4af37;
+    }
+
+    .form-section h2 {
+      color: #2166ae;
+      margin-top: 0;
+      font-size: 1.8em;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #2a3d4c;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #d4af37;
+      border-radius: 8px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05em;
+      color: #2a3d4c;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #2166ae;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .convite-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 24px rgba(44, 82, 130, 0.08);
+      border: 4px solid;
+      border-image: linear-gradient(135deg, #d4af37 40%, #fffbe8 60%, #d4af37 100%) 1;
+      padding: 32px 40px;
+      position: relative;
+    }
+
+    .convite-container:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      pointer-events: none;
+      border: 2px dashed #d4af37;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header img {
+      width: 80px;
+      margin-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 2.2em;
+      color: #2166ae;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .sub-title {
+      text-align: center;
+      color: #4db6ac;
+      font-size: 1.25em;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .content {
+      font-size: 1.12em;
+      line-height: 1.8;
+      color: #2a3d4c;
+      margin-bottom: 40px;
+    }
+
+    .content strong {
+      color: #2166ae;
+    }
+
+    .footer {
+      text-align: right;
+      color: #d4af37;
+      font-size: 1em;
+      font-family: 'Cormorant Garamond', serif;
+      margin-top: 24px;
+    }
+
+    .placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    .preview-title {
+      text-align: center;
+      color: #2166ae;
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    @media print {
+      .form-section,
+      .main-title,
+      .main-subtitle,
+      .preview-title {
+        display: none;
+      }
+
+      .grid-container {
+        display: block;
+      }
+
+      body {
+        padding: 0;
+      }
+    }
+  </style>
+  <!-- Fonte elegante do Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond:400,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="main-title">Gerador de Convites CRO/RS</h1>
+    <p class="main-subtitle">Sistema de Geração de Convites Formais</p>
+
+    <div class="grid-container">
+      <!-- Formulário -->
+      <div class="form-section">
+        <h2>Dados do Convite</h2>
+        
+        <div class="form-group">
+          <label for="nomeConvidado">Nome do Convidado:</label>
+          <input type="text" id="nomeConvidado" placeholder="Digite o nome do convidado">
+        </div>
+
+        <div class="form-group">
+          <label for="dataEvento">Data do Evento:</label>
+          <input type="text" id="dataEvento" placeholder="Ex: 15 de dezembro de 2024">
+        </div>
+
+        <div class="form-group">
+          <label for="localEvento">Local do Evento:</label>
+          <input type="text" id="localEvento" placeholder="Digite o local do evento">
+        </div>
+
+        <div class="form-group">
+          <label for="horarioEvento">Horário:</label>
+          <input type="text" id="horarioEvento" placeholder="Ex: 19h00">
+        </div>
+
+        <div class="form-group">
+          <label for="descricaoEvento">Descrição do Evento:</label>
+          <textarea id="descricaoEvento" placeholder="Digite uma descrição personalizada para o evento (opcional)"></textarea>
+        </div>
+      </div>
+
+      <!-- Prévia do Convite -->
+      <div>
+        <h2 class="preview-title">Prévia do Convite</h2>
+        <div class="convite-container">
+          <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png" alt="Símbolo Odontologia">
+            <h1>Convite Formal</h1>
+            <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
+          </div>
+          <div class="content">
+            <span>É com grande honra que convidamos </span>
+            <strong><span id="previewNome" class="placeholder">[Nome do Convidado]</span></strong>
+            <span> para o evento especial promovido pelo CRO/RS.</span><br>
+            <br>
+            <span id="previewDescricao"></span>
+            <strong>Data:</strong> <span id="previewData" class="placeholder">[Data do evento]</span><br>
+            <strong>Local:</strong> <span id="previewLocal" class="placeholder">[Local do evento]</span><br>
+            <strong>Horário:</strong> <span id="previewHorario" class="placeholder">[Horário]</span><br>
+            <br>
+            Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
+          </div>
+          <div class="footer">
+            Atenciosamente,<br>
+            CRO/RS
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Elementos do formulário
+    const nomeConvidadoInput = document.getElementById('nomeConvidado');
+    const dataEventoInput = document.getElementById('dataEvento');
+    const localEventoInput = document.getElementById('localEvento');
+    const horarioEventoInput = document.getElementById('horarioEvento');
+    const descricaoEventoInput = document.getElementById('descricaoEvento');
+
+    // Elementos de prévia
+    const previewNome = document.getElementById('previewNome');
+    const previewData = document.getElementById('previewData');
+    const previewLocal = document.getElementById('previewLocal');
+    const previewHorario = document.getElementById('previewHorario');
+    const previewDescricao = document.getElementById('previewDescricao');
+
+    // Função para atualizar a prévia
+    function atualizarPrevia() {
+      // Atualizar nome
+      if (nomeConvidadoInput.value.trim()) {
+        previewNome.textContent = nomeConvidadoInput.value;
+        previewNome.classList.remove('placeholder');
+      } else {
+        previewNome.textContent = '[Nome do Convidado]';
+        previewNome.classList.add('placeholder');
+      }
+
+      // Atualizar data
+      if (dataEventoInput.value.trim()) {
+        previewData.textContent = dataEventoInput.value;
+        previewData.classList.remove('placeholder');
+      } else {
+        previewData.textContent = '[Data do evento]';
+        previewData.classList.add('placeholder');
+      }
+
+      // Atualizar local
+      if (localEventoInput.value.trim()) {
+        previewLocal.textContent = localEventoInput.value;
+        previewLocal.classList.remove('placeholder');
+      } else {
+        previewLocal.textContent = '[Local do evento]';
+        previewLocal.classList.add('placeholder');
+      }
+
+      // Atualizar horário
+      if (horarioEventoInput.value.trim()) {
+        previewHorario.textContent = horarioEventoInput.value;
+        previewHorario.classList.remove('placeholder');
+      } else {
+        previewHorario.textContent = '[Horário]';
+        previewHorario.classList.add('placeholder');
+      }
+
+      // Atualizar descrição (se fornecida)
+      if (descricaoEventoInput.value.trim()) {
+        previewDescricao.innerHTML = descricaoEventoInput.value + '<br><br>';
+        previewDescricao.classList.remove('placeholder');
+      } else {
+        previewDescricao.innerHTML = '';
+      }
+    }
+
+    // Adicionar event listeners para atualização em tempo real
+    nomeConvidadoInput.addEventListener('input', atualizarPrevia);
+    dataEventoInput.addEventListener('input', atualizarPrevia);
+    localEventoInput.addEventListener('input', atualizarPrevia);
+    horarioEventoInput.addEventListener('input', atualizarPrevia);
+    descricaoEventoInput.addEventListener('input', atualizarPrevia);
+
+    // Inicializar prévia
+    atualizarPrevia();
+  </script>
+</body>
+</html>
