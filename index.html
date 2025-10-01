@@ -319,6 +319,7 @@
     .convite-container.template-formal {
       border: 4px solid;
       border-image: linear-gradient(135deg, #d4af37 40%, #fffbe8 60%, #d4af37 100%) 1;
+      box-shadow: 0 8px 32px rgba(44, 82, 130, 0.12), inset 0 0 0 1px rgba(212, 175, 55, 0.1);
     }
 
     .convite-container.template-formal:before {
@@ -328,6 +329,15 @@
       border-radius: 12px;
       pointer-events: none;
       border: 2px dashed #d4af37;
+      opacity: 0.6;
+    }
+
+    .convite-container.template-formal .header h1 {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
     }
 
     /* Modern Template */
@@ -371,18 +381,26 @@
       align-items: center;
       gap: 30px;
       margin-bottom: 20px;
+      padding: 10px;
     }
 
     .header .logo-dual img {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .header .logo-dual .divider {
-      width: 2px;
-      height: 60px;
-      background: linear-gradient(to bottom, transparent, #d4af37, transparent);
+      width: 3px;
+      height: 80px;
+      background: linear-gradient(to bottom, 
+        transparent 0%, 
+        rgba(212, 175, 55, 0.3) 10%,
+        rgba(212, 175, 55, 0.8) 50%, 
+        rgba(212, 175, 55, 0.3) 90%,
+        transparent 100%);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
     }
 
     .header img {
@@ -442,9 +460,11 @@
     .footer {
       text-align: right;
       color: #d4af37;
-      font-size: 1em;
-      margin-top: 30px;
+      font-size: 1.05em;
+      margin-top: 40px;
       font-weight: 500;
+      font-style: italic;
+      letter-spacing: 0.5px;
     }
 
     .template-minimalist .footer {
@@ -706,9 +726,11 @@
 
             <div class="form-group">
               <label for="excelFile">Importar dados do Excel:</label>
-              <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="padding: 8px; background: white;">
+              <input type="file" id="excelFile" accept=".xlsx,.xls,.csv,.xlsm,.xlsb" style="padding: 8px; background: white;">
               <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
-                Aceita arquivos .xlsx, .xls e .csv. O arquivo deve conter colunas: Nome, Data, Local, Horário
+                <strong>Formatos aceitos:</strong> .xlsx, .xls, .csv, .xlsm, .xlsb (qualquer tipo de Excel)<br>
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas com nomes como: Nome/Name/Convidado, Data/Date/Dia, Local/Lugar/Location, Horário/Horario/Hora/Time<br>
+                <strong>Como usar:</strong> Selecione o arquivo e os dados da primeira linha serão importados automaticamente para o formulário.
               </small>
             </div>
 
@@ -730,9 +752,15 @@
           <div class="convite-container template-formal" id="previewContainer">
             <div class="header">
               <div class="logo-dual">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" alt="Brasão da República">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Coat_of_arms_of_Brazil.svg/800px-Coat_of_arms_of_Brazil.svg.png" 
+                     alt="Brasão da República" 
+                     crossorigin="anonymous"
+                     onerror="this.style.display='none'">
                 <div class="divider"></div>
-                <img src="https://crors.org.br/wp-content/uploads/2024/01/cropped-Logo-oficial-CRO-32x32.png" alt="Logo CRO/RS" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png'">
+                <img src="https://crors.org.br/wp-content/uploads/2024/01/cropped-Logo-oficial-CRO-32x32.png" 
+                     alt="Logo CRO/RS" 
+                     crossorigin="anonymous"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Caduceus.svg/1200px-Caduceus.svg.png'">
               </div>
               <h1 id="previewTitulo">Convite Formal</h1>
               <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
