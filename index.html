@@ -821,6 +821,39 @@
       color: #880e4f;
       border: 2px solid #e91e63;
     }
+
+    /* Editable content styles */
+    .editable-area {
+      cursor: text;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .editable-area:hover {
+      background: rgba(92, 107, 192, 0.05);
+      outline: 2px dashed rgba(92, 107, 192, 0.3);
+      outline-offset: 4px;
+    }
+
+    .editable-area:focus {
+      background: rgba(92, 107, 192, 0.08);
+      outline: 2px solid rgba(92, 107, 192, 0.5);
+      outline-offset: 4px;
+    }
+
+    .edit-hint {
+      font-size: 0.75em;
+      color: #5c6bc0;
+      font-style: italic;
+      display: block;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .fixed-signature {
+      pointer-events: none;
+      user-select: none;
+    }
   </style>
   <!-- Fontes elegantes do Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -964,6 +997,7 @@
         <!-- Prévia do Convite -->
         <div>
           <h2 class="preview-title">Prévia do Convite</h2>
+          <p class="edit-hint">💡 Clique no título, conteúdo ou rodapé para editar o texto diretamente</p>
           <div class="convite-container template-formal" id="previewContainer">
             <div class="header">
               <div class="logo-single">
@@ -972,10 +1006,10 @@
                      crossorigin="anonymous"
                      onerror="this.style.display='none'">
               </div>
-              <h1 id="previewTitulo">Convite Formal</h1>
-              <div class="sub-title">CRO/RS - Conselho Regional de Odontologia do RS</div>
+              <h1 id="previewTitulo" class="editable-area" contenteditable="true">Convite Formal</h1>
+              <div class="sub-title editable-area" contenteditable="true">CRO/RS - Conselho Regional de Odontologia do RS</div>
             </div>
-            <div class="content" id="previewContent">
+            <div class="content editable-area" id="previewContent" contenteditable="true">
               <span>É com grande honra que convidamos </span>
               <strong><span id="previewNome" class="placeholder">[Nome do Convidado]</span></strong>
               <span> para o evento especial promovido pelo CRO/RS.</span><br>
@@ -988,8 +1022,10 @@
               Contamos com sua presença para abrilhantar ainda mais este momento de celebração da odontologia gaúcha.<br>
             </div>
             <div class="footer">
-              <strong>CD Nelson Freitas Eguia</strong><br>
-              Presidente do CRO/RS
+              <div class="fixed-signature">
+                <strong>CD Nelson Freitas Eguia</strong><br>
+                Presidente do CRO/RS
+              </div>
             </div>
             <div class="qr-code-container" id="qrCodeContainer" style="display: none;">
               <img id="qrCodeImage" src="" alt="QR Code">
