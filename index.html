@@ -1026,6 +1026,147 @@
       background: white;
       font-size: 0.85em;
     }
+
+    /* Filters and Statistics Styles */
+    .filters-stats-container {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: #5c6bc0;
+      transform: translateY(-2px);
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #78909c;
+      font-weight: 500;
+    }
+
+    .filters-section {
+      border-top: 2px solid #e0e0e0;
+      padding-top: 20px;
+    }
+
+    .filters-title {
+      color: #1a237e;
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filters-title::before {
+      content: '🔍';
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filter-group label {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: #5c6bc0;
+    }
+
+    .filter-group select {
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.9em;
+      transition: all 0.3s;
+    }
+
+    .filter-group select:focus {
+      outline: none;
+      border-color: #5c6bc0;
+      box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.1);
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-btn.apply {
+      background: #5c6bc0;
+      color: white;
+    }
+
+    .filter-btn.apply:hover {
+      background: #3f51b5;
+    }
+
+    .filter-btn.clear {
+      background: #e0e0e0;
+      color: #5c6bc0;
+    }
+
+    .filter-btn.clear:hover {
+      background: #bdbdbd;
+    }
+
+    .filter-btn.report {
+      background: #d4af37;
+      color: #1a237e;
+    }
+
+    .filter-btn.report:hover {
+      background: #c09525;
+    }
   </style>
   <!-- Fontes elegantes do Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -1279,6 +1420,10 @@
               <label><span class="icon-phone"></span> Telefone:</label>
               <input type="tel" id="remidosTelefone" placeholder="(51) 99999-9999">
             </div>
+            <div class="form-group-enhanced">
+              <label>📱 WhatsApp:</label>
+              <input type="tel" id="remidosWhatsapp" placeholder="(51) 99999-9999">
+            </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
             <div class="form-group-enhanced">
@@ -1295,6 +1440,71 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('remidos')" style="margin-top: 20px;">✨ Adicionar Remido</button>
+        </div>
+
+        <div class="filters-stats-container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="remidos-total-count">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="remidos-enviado-count">0</div>
+              <div class="stat-label">Convites Enviados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="remidos-recebido-count">0</div>
+              <div class="stat-label">Recebimentos Confirmados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="remidos-confirmado-count">0</div>
+              <div class="stat-label">Presenças Confirmadas</div>
+            </div>
+          </div>
+
+          <div class="filters-section">
+            <div class="filters-title">Filtros Avançados</div>
+            <div class="filters-grid">
+              <div class="filter-group">
+                <label>Convite Enviado:</label>
+                <select id="remidos-filter-enviado">
+                  <option value="all">Todos</option>
+                  <option value="true">Enviado</option>
+                  <option value="false">Não Enviado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Recebimento:</label>
+                <select id="remidos-filter-recebido">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Presença:</label>
+                <select id="remidos-filter-confirmado">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Tipo de Contato:</label>
+                <select id="remidos-filter-contato">
+                  <option value="all">Todos</option>
+                  <option value="email">Com E-mail</option>
+                  <option value="telefone">Com Telefone</option>
+                  <option value="whatsapp">Com WhatsApp</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="filter-btn apply" onclick="applyFilters('remidos')">🔍 Aplicar Filtros</button>
+              <button class="filter-btn clear" onclick="clearFilters('remidos')">✖️ Limpar Filtros</button>
+              <button class="filter-btn report" onclick="generateReport('remidos')">📄 Gerar Relatório</button>
+            </div>
+          </div>
         </div>
 
         <div style="margin-top: 30px;">
@@ -1317,6 +1527,7 @@
                   <th>CRO/RS</th>
                   <th>E-mail</th>
                   <th>Telefone</th>
+                  <th>WhatsApp</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -1352,6 +1563,10 @@
               <label><span class="icon-phone"></span> Telefone:</label>
               <input type="tel" id="autoridadesTelefone" placeholder="(51) 99999-9999">
             </div>
+            <div class="form-group-enhanced">
+              <label>📱 WhatsApp:</label>
+              <input type="tel" id="autoridadesWhatsapp" placeholder="(51) 99999-9999">
+            </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
             <div class="form-group-enhanced">
@@ -1368,6 +1583,71 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('autoridades')" style="margin-top: 20px;">✨ Adicionar Autoridade</button>
+        </div>
+
+        <div class="filters-stats-container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="autoridades-total-count">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="autoridades-enviado-count">0</div>
+              <div class="stat-label">Convites Enviados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="autoridades-recebido-count">0</div>
+              <div class="stat-label">Recebimentos Confirmados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="autoridades-confirmado-count">0</div>
+              <div class="stat-label">Presenças Confirmadas</div>
+            </div>
+          </div>
+
+          <div class="filters-section">
+            <div class="filters-title">Filtros Avançados</div>
+            <div class="filters-grid">
+              <div class="filter-group">
+                <label>Convite Enviado:</label>
+                <select id="autoridades-filter-enviado">
+                  <option value="all">Todos</option>
+                  <option value="true">Enviado</option>
+                  <option value="false">Não Enviado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Recebimento:</label>
+                <select id="autoridades-filter-recebido">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Presença:</label>
+                <select id="autoridades-filter-confirmado">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Tipo de Contato:</label>
+                <select id="autoridades-filter-contato">
+                  <option value="all">Todos</option>
+                  <option value="email">Com E-mail</option>
+                  <option value="telefone">Com Telefone</option>
+                  <option value="whatsapp">Com WhatsApp</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="filter-btn apply" onclick="applyFilters('autoridades')">🔍 Aplicar Filtros</button>
+              <button class="filter-btn clear" onclick="clearFilters('autoridades')">✖️ Limpar Filtros</button>
+              <button class="filter-btn report" onclick="generateReport('autoridades')">📄 Gerar Relatório</button>
+            </div>
+          </div>
         </div>
 
         <div style="margin-top: 30px;">
@@ -1390,6 +1670,7 @@
                   <th>Cargo/Instituição</th>
                   <th>E-mail</th>
                   <th>Telefone</th>
+                  <th>WhatsApp</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -1429,6 +1710,10 @@
               <label><span class="icon-phone"></span> Telefone:</label>
               <input type="tel" id="honraTelefone" placeholder="(51) 99999-9999">
             </div>
+            <div class="form-group-enhanced">
+              <label>📱 WhatsApp:</label>
+              <input type="tel" id="honraWhatsapp" placeholder="(51) 99999-9999">
+            </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
             <div class="form-group-enhanced">
@@ -1445,6 +1730,71 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('honra')" style="margin-top: 20px;">✨ Adicionar Homenageado</button>
+        </div>
+
+        <div class="filters-stats-container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="honra-total-count">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="honra-enviado-count">0</div>
+              <div class="stat-label">Convites Enviados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="honra-recebido-count">0</div>
+              <div class="stat-label">Recebimentos Confirmados</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="honra-confirmado-count">0</div>
+              <div class="stat-label">Presenças Confirmadas</div>
+            </div>
+          </div>
+
+          <div class="filters-section">
+            <div class="filters-title">Filtros Avançados</div>
+            <div class="filters-grid">
+              <div class="filter-group">
+                <label>Convite Enviado:</label>
+                <select id="honra-filter-enviado">
+                  <option value="all">Todos</option>
+                  <option value="true">Enviado</option>
+                  <option value="false">Não Enviado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Recebimento:</label>
+                <select id="honra-filter-recebido">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Presença:</label>
+                <select id="honra-filter-confirmado">
+                  <option value="all">Todos</option>
+                  <option value="true">Confirmado</option>
+                  <option value="false">Não Confirmado</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Tipo de Contato:</label>
+                <select id="honra-filter-contato">
+                  <option value="all">Todos</option>
+                  <option value="email">Com E-mail</option>
+                  <option value="telefone">Com Telefone</option>
+                  <option value="whatsapp">Com WhatsApp</option>
+                </select>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="filter-btn apply" onclick="applyFilters('honra')">🔍 Aplicar Filtros</button>
+              <button class="filter-btn clear" onclick="clearFilters('honra')">✖️ Limpar Filtros</button>
+              <button class="filter-btn report" onclick="generateReport('honra')">📄 Gerar Relatório</button>
+            </div>
+          </div>
         </div>
 
         <div style="margin-top: 30px;">
@@ -1467,6 +1817,7 @@
                   <th>Categoria</th>
                   <th>E-mail</th>
                   <th>Telefone</th>
+                  <th>WhatsApp</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -2033,59 +2384,66 @@
         const cro = document.getElementById('remidosCRO').value.trim();
         const email = document.getElementById('remidosEmail').value.trim();
         const telefone = document.getElementById('remidosTelefone').value.trim();
+        const whatsapp = document.getElementById('remidosWhatsapp').value.trim();
         
         if (!nome || !cro) {
           alert('Por favor, preencha o nome e o CRO/RS');
           return;
         }
         
-        guest = { nome, cro, email, telefone, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, cro, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
         
         // Clear form
         document.getElementById('remidosNome').value = '';
         document.getElementById('remidosCRO').value = '';
         document.getElementById('remidosEmail').value = '';
         document.getElementById('remidosTelefone').value = '';
+        document.getElementById('remidosWhatsapp').value = '';
       } else if (type === 'autoridades') {
         const nome = document.getElementById('autoridadesNome').value.trim();
         const cargo = document.getElementById('autoridadesCargo').value.trim();
         const email = document.getElementById('autoridadesEmail').value.trim();
         const telefone = document.getElementById('autoridadesTelefone').value.trim();
+        const whatsapp = document.getElementById('autoridadesWhatsapp').value.trim();
         
         if (!nome || !cargo) {
           alert('Por favor, preencha o nome e o cargo');
           return;
         }
         
-        guest = { nome, cargo, email, telefone, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, cargo, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
         
         // Clear form
         document.getElementById('autoridadesNome').value = '';
         document.getElementById('autoridadesCargo').value = '';
         document.getElementById('autoridadesEmail').value = '';
         document.getElementById('autoridadesTelefone').value = '';
+        document.getElementById('autoridadesWhatsapp').value = '';
       } else if (type === 'honra') {
         const nome = document.getElementById('honraNome').value.trim();
         const categoria = document.getElementById('honraCategoria').value;
         const email = document.getElementById('honraEmail').value.trim();
         const telefone = document.getElementById('honraTelefone').value.trim();
+        const whatsapp = document.getElementById('honraWhatsapp').value.trim();
         
         if (!nome) {
           alert('Por favor, preencha o nome');
           return;
         }
         
-        guest = { nome, categoria, email, telefone, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, categoria, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
         
         // Clear form
         document.getElementById('honraNome').value = '';
         document.getElementById('honraEmail').value = '';
         document.getElementById('honraTelefone').value = '';
+        document.getElementById('honraWhatsapp').value = '';
       }
       
       guestsData[type].push(guest);
       saveGuests();
       renderTable(type);
+      updateStatistics(type);
     }
 
     // Delete guest
@@ -2094,6 +2452,7 @@
         guestsData[type].splice(index, 1);
         saveGuests();
         renderTable(type);
+        updateStatistics(type);
       }
     }
 
@@ -2106,16 +2465,19 @@
         document.getElementById('remidosCRO').value = guest.cro;
         document.getElementById('remidosEmail').value = guest.email || '';
         document.getElementById('remidosTelefone').value = guest.telefone || '';
+        document.getElementById('remidosWhatsapp').value = guest.whatsapp || '';
       } else if (type === 'autoridades') {
         document.getElementById('autoridadesNome').value = guest.nome;
         document.getElementById('autoridadesCargo').value = guest.cargo;
         document.getElementById('autoridadesEmail').value = guest.email || '';
         document.getElementById('autoridadesTelefone').value = guest.telefone || '';
+        document.getElementById('autoridadesWhatsapp').value = guest.whatsapp || '';
       } else if (type === 'honra') {
         document.getElementById('honraNome').value = guest.nome;
         document.getElementById('honraCategoria').value = guest.categoria;
         document.getElementById('honraEmail').value = guest.email || '';
         document.getElementById('honraTelefone').value = guest.telefone || '';
+        document.getElementById('honraWhatsapp').value = guest.whatsapp || '';
       }
       
       deleteGuest(type, index);
@@ -2126,6 +2488,7 @@
       guestsData[type][index][field] = value === 'true';
       saveGuests();
       renderTable(type);
+      updateStatistics(type);
     }
 
     // Render table
@@ -2155,6 +2518,7 @@
           <td>${secondColumn}</td>
           <td>${guest.email || '-'}</td>
           <td>${guest.telefone || '-'}</td>
+          <td>${guest.whatsapp || '-'}</td>
           <td>
             <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
               <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
@@ -2238,6 +2602,7 @@
               ${detailsHTML}
               <div class="guest-detail"><span class="icon-email"></span> ${guest.email || 'N/A'}</div>
               <div class="guest-detail"><span class="icon-phone"></span> ${guest.telefone || 'N/A'}</div>
+              <div class="guest-detail">📱 WhatsApp: ${guest.whatsapp || 'N/A'}</div>
             </div>
           </div>
           <div class="guest-status-row">
@@ -2284,8 +2649,232 @@
       }
     }
 
+    // Update statistics counters
+    function updateStatistics(type) {
+      const guests = guestsData[type] || [];
+      const total = guests.length;
+      const enviado = guests.filter(g => g.enviado).length;
+      const recebido = guests.filter(g => g.recebido).length;
+      const confirmado = guests.filter(g => g.confirmado).length;
+      
+      document.getElementById(`${type}-total-count`).textContent = total;
+      document.getElementById(`${type}-enviado-count`).textContent = enviado;
+      document.getElementById(`${type}-recebido-count`).textContent = recebido;
+      document.getElementById(`${type}-confirmado-count`).textContent = confirmado;
+    }
+
+    // Update all statistics
+    function updateAllStatistics() {
+      updateStatistics('remidos');
+      updateStatistics('autoridades');
+      updateStatistics('honra');
+    }
+
+    // Store filtered data for each type
+    let filteredData = {
+      remidos: null,
+      autoridades: null,
+      honra: null
+    };
+
+    // Apply filters
+    function applyFilters(type) {
+      const filterEnviado = document.getElementById(`${type}-filter-enviado`).value;
+      const filterRecebido = document.getElementById(`${type}-filter-recebido`).value;
+      const filterConfirmado = document.getElementById(`${type}-filter-confirmado`).value;
+      const filterContato = document.getElementById(`${type}-filter-contato`).value;
+      
+      let filtered = [...guestsData[type]];
+      
+      // Apply enviado filter
+      if (filterEnviado !== 'all') {
+        filtered = filtered.filter(g => g.enviado === (filterEnviado === 'true'));
+      }
+      
+      // Apply recebido filter
+      if (filterRecebido !== 'all') {
+        filtered = filtered.filter(g => g.recebido === (filterRecebido === 'true'));
+      }
+      
+      // Apply confirmado filter
+      if (filterConfirmado !== 'all') {
+        filtered = filtered.filter(g => g.confirmado === (filterConfirmado === 'true'));
+      }
+      
+      // Apply contato filter
+      if (filterContato !== 'all') {
+        filtered = filtered.filter(g => {
+          if (filterContato === 'email') return g.email && g.email.trim() !== '';
+          if (filterContato === 'telefone') return g.telefone && g.telefone.trim() !== '';
+          if (filterContato === 'whatsapp') return g.whatsapp && g.whatsapp.trim() !== '';
+          return true;
+        });
+      }
+      
+      // Store filtered data
+      filteredData[type] = filtered;
+      
+      // Render filtered data
+      renderFilteredGuests(type, filtered);
+      
+      // Show notification
+      alert(`Filtros aplicados! Exibindo ${filtered.length} de ${guestsData[type].length} convidados.`);
+    }
+
+    // Clear filters
+    function clearFilters(type) {
+      document.getElementById(`${type}-filter-enviado`).value = 'all';
+      document.getElementById(`${type}-filter-recebido`).value = 'all';
+      document.getElementById(`${type}-filter-confirmado`).value = 'all';
+      document.getElementById(`${type}-filter-contato`).value = 'all';
+      
+      filteredData[type] = null;
+      renderTable(type);
+      renderCards(type);
+      
+      alert('Filtros limpos! Exibindo todos os convidados.');
+    }
+
+    // Render filtered guests
+    function renderFilteredGuests(type, filtered) {
+      // Temporarily replace guestsData with filtered data for rendering
+      const original = guestsData[type];
+      guestsData[type] = filtered;
+      renderTable(type);
+      renderCards(type);
+      guestsData[type] = original;
+    }
+
+    // Generate PDF report
+    function generateReport(type) {
+      const { jsPDF } = window.jspdf;
+      
+      // Get data to report (filtered or all)
+      const dataToReport = filteredData[type] || guestsData[type];
+      
+      if (dataToReport.length === 0) {
+        alert('Não há dados para gerar o relatório!');
+        return;
+      }
+      
+      const pdf = new jsPDF();
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      let yPosition = margin;
+      
+      // Title
+      pdf.setFontSize(18);
+      pdf.setFont(undefined, 'bold');
+      const titleMap = {
+        'remidos': 'Relatório de Remidos',
+        'autoridades': 'Relatório de Autoridades',
+        'honra': 'Relatório de Honra ao Mérito'
+      };
+      pdf.text(titleMap[type], margin, yPosition);
+      yPosition += 10;
+      
+      // Date
+      pdf.setFontSize(10);
+      pdf.setFont(undefined, 'normal');
+      pdf.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, margin, yPosition);
+      yPosition += 5;
+      
+      // Statistics
+      const total = dataToReport.length;
+      const enviado = dataToReport.filter(g => g.enviado).length;
+      const recebido = dataToReport.filter(g => g.recebido).length;
+      const confirmado = dataToReport.filter(g => g.confirmado).length;
+      
+      pdf.text(`Total de Convidados: ${total}`, margin, yPosition);
+      yPosition += 5;
+      pdf.text(`Convites Enviados: ${enviado}`, margin, yPosition);
+      yPosition += 5;
+      pdf.text(`Recebimentos Confirmados: ${recebido}`, margin, yPosition);
+      yPosition += 5;
+      pdf.text(`Presenças Confirmadas: ${confirmado}`, margin, yPosition);
+      yPosition += 10;
+      
+      // Line separator
+      pdf.setDrawColor(200, 200, 200);
+      pdf.line(margin, yPosition, pageWidth - margin, yPosition);
+      yPosition += 10;
+      
+      // Guest list
+      pdf.setFontSize(12);
+      pdf.setFont(undefined, 'bold');
+      pdf.text('Lista de Convidados:', margin, yPosition);
+      yPosition += 8;
+      
+      pdf.setFontSize(9);
+      pdf.setFont(undefined, 'normal');
+      
+      dataToReport.forEach((guest, index) => {
+        // Check if we need a new page
+        if (yPosition > pageHeight - 30) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+        
+        // Guest number
+        pdf.setFont(undefined, 'bold');
+        pdf.text(`${index + 1}. ${guest.nome}`, margin, yPosition);
+        yPosition += 5;
+        
+        pdf.setFont(undefined, 'normal');
+        
+        // Second column (CRO, Cargo, or Category)
+        if (type === 'remidos') {
+          pdf.text(`   CRO/RS: ${guest.cro || 'N/A'}`, margin, yPosition);
+        } else if (type === 'autoridades') {
+          pdf.text(`   Cargo: ${guest.cargo || 'N/A'}`, margin, yPosition);
+        } else if (type === 'honra') {
+          const categorias = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social'
+          };
+          pdf.text(`   Categoria: ${categorias[guest.categoria] || guest.categoria}`, margin, yPosition);
+        }
+        yPosition += 5;
+        
+        // Contact info
+        pdf.text(`   E-mail: ${guest.email || 'N/A'}`, margin, yPosition);
+        yPosition += 4;
+        pdf.text(`   Telefone: ${guest.telefone || 'N/A'}`, margin, yPosition);
+        yPosition += 4;
+        pdf.text(`   WhatsApp: ${guest.whatsapp || 'N/A'}`, margin, yPosition);
+        yPosition += 5;
+        
+        // Status
+        const statusEnviado = guest.enviado ? '✓ Enviado' : '✗ Não Enviado';
+        const statusRecebido = guest.recebido ? '✓ Confirmado' : '✗ Não Confirmado';
+        const statusConfirmado = guest.confirmado ? '✓ Confirmado' : '✗ Não Confirmado';
+        
+        pdf.text(`   Convite: ${statusEnviado} | Recebimento: ${statusRecebido} | Presença: ${statusConfirmado}`, margin, yPosition);
+        yPosition += 8;
+      });
+      
+      // Footer
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(8);
+        pdf.setTextColor(150);
+        pdf.text(`Página ${i} de ${totalPages}`, pageWidth - margin - 20, pageHeight - 10);
+        pdf.text('CRO/RS - Sistema de Gerenciamento de Convidados', margin, pageHeight - 10);
+      }
+      
+      // Save PDF
+      const fileName = `relatorio_${type}_${new Date().getTime()}.pdf`;
+      pdf.save(fileName);
+      
+      alert(`Relatório gerado com sucesso! ${dataToReport.length} convidados incluídos.`);
+    }
+
     // Initialize on load
     loadGuests();
+    updateAllStatistics();
   </script>
 </body>
 </html>
