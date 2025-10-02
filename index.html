@@ -2564,6 +2564,7 @@
       guestsData[type].push(guest);
       saveGuests();
       renderTable(type);
+      renderCards(type);
       updateStatistics(type);
     }
 
@@ -2573,6 +2574,7 @@
         guestsData[type].splice(index, 1);
         saveGuests();
         renderTable(type);
+        renderCards(type);
         updateStatistics(type);
       }
     }
@@ -2612,6 +2614,7 @@
       guestsData[type][index][field] = value === 'true';
       saveGuests();
       renderTable(type);
+      renderCards(type);
       updateStatistics(type);
     }
     
