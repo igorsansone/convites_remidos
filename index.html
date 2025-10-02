@@ -1248,6 +1248,14 @@
               </select>
             </div>
 
+            <div class="form-group" id="numeroCROGroup" style="display: none;">
+              <label for="numeroCRO">Número do CRO/RS:</label>
+              <input type="text" id="numeroCRO" placeholder="Ex: 12345">
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                Este número será exibido no convite (ex: "inscrito(a) neste Conselho sob o nº CRO/RS 12345")
+              </small>
+            </div>
+
             <div class="form-group">
               <label for="tipoEvento">Tipo de Evento:</label>
               <select id="tipoEvento">
@@ -1907,6 +1915,8 @@
     const mensagemPersonalizadaInput = document.getElementById('mensagemPersonalizada');
     const tipoEventoSelect = document.getElementById('tipoEvento');
     const textoModeloSelect = document.getElementById('textoModelo');
+    const numeroCROInput = document.getElementById('numeroCRO');
+    const numeroCROGroup = document.getElementById('numeroCROGroup');
     const excelFileInput = document.getElementById('excelFile');
     const incluirQRCodeCheckbox = document.getElementById('incluirQRCode');
     const linkConfirmacaoInput = document.getElementById('linkConfirmacao');
@@ -2100,10 +2110,10 @@
       },
       remidos: {
         titulo: 'CONVITE REMIDOS 2025',
-        conteudo: (nome, data, local, horario, mensagem) => `
+        conteudo: (nome, data, local, horario, mensagem, numeroCRO) => `
           <span>O Conselho Regional de Odontologia do Estado do Rio Grande do Sul, por meio de seu Presidente, CD Nelson Freitas Eguia, tem a honra de convidar o(a) Cirurgião(ã)-Dentista </span>
           <strong><span class="${nome ? '' : 'placeholder'}">${nome || '[NOME COMPLETO]'}</span></strong>
-          <span>, inscrito(a) neste Conselho sob o nº CRO/RS [XXXXX], para participar do Evento Alusivo ao Dia do Cirurgião-Dentista – Edição 2025, ocasião em que lhe será outorgada a condição de Remido(a) deste Regional.</span><br>
+          <span>, inscrito(a) neste Conselho sob o nº CRO/RS <strong><span class="${numeroCRO ? '' : 'placeholder'}">${numeroCRO || '[XXXXX]'}</span></strong>, para participar do Evento Alusivo ao Dia do Cirurgião-Dentista – Edição 2025, ocasião em que lhe será outorgada a condição de Remido(a) deste Regional.</span><br>
           <br>
           ${mensagem ? mensagem + '<br><br>' : ''}
           <strong>Data:</strong> <span class="${data ? '' : 'placeholder'}">${data || '31 de outubro de 2025'}</span><br>
@@ -2164,13 +2174,26 @@
       const horario = horarioEventoInput.value.trim();
       const mensagem = mensagemPersonalizadaInput.value.trim();
       const modeloTexto = textoModeloSelect.value;
+      const numeroCRO = numeroCROInput.value.trim();
+
+      // Show/hide CRO field based on selected model
+      if (modeloTexto === 'remidos') {
+        numeroCROGroup.style.display = 'block';
+      } else {
+        numeroCROGroup.style.display = 'none';
+      }
 
       // Atualizar título baseado no modelo de texto
       const modelo = textosModelos[modeloTexto];
       previewTitulo.textContent = modelo.titulo;
 
       // Atualizar conteúdo usando o modelo de texto
-      previewContent.innerHTML = modelo.conteudo(nome, data, local, horario, mensagem);
+      // Pass numeroCRO as the 6th parameter for remidos template
+      if (modeloTexto === 'remidos') {
+        previewContent.innerHTML = modelo.conteudo(nome, data, local, horario, mensagem, numeroCRO);
+      } else {
+        previewContent.innerHTML = modelo.conteudo(nome, data, local, horario, mensagem);
+      }
     }
 
     // Excel Import Functionality
@@ -2371,6 +2394,7 @@
     mensagemPersonalizadaInput.addEventListener('input', atualizarPrevia);
     tipoEventoSelect.addEventListener('change', atualizarPrevia);
     textoModeloSelect.addEventListener('change', atualizarPrevia);
+    numeroCROInput.addEventListener('input', atualizarPrevia);
 
     // Inicializar prévia
     atualizarPrevia();
