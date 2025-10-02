@@ -1440,6 +1440,23 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('remidos')" style="margin-top: 20px;">✨ Adicionar Remido</button>
+          
+          <!-- Excel Import Section for Remidos -->
+          <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #5c6bc0;">
+            <h3 style="margin-top: 0; color: #1a237e;">📊 Importar Excel</h3>
+            <p style="color: #666; margin-bottom: 15px;">Faça upload de um arquivo Excel (.xlsx) para cadastrar múltiplos participantes de uma vez.</p>
+            <div style="margin-bottom: 10px;">
+              <strong>Formato esperado:</strong>
+              <ul style="margin: 5px 0; color: #666;">
+                <li>Nome (obrigatório)</li>
+                <li>CRO / Nº CRO (obrigatório)</li>
+                <li>Email / E-mail (opcional)</li>
+                <li>Telefone / Celular (opcional)</li>
+              </ul>
+            </div>
+            <input type="file" id="excelFileRemidos" accept=".xlsx,.xls" style="padding: 8px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+            <button class="btn btn-primary" onclick="processExcelFile('remidos')" style="margin-left: 10px;">📤 Processar Arquivo</button>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1583,6 +1600,23 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('autoridades')" style="margin-top: 20px;">✨ Adicionar Autoridade</button>
+          
+          <!-- Excel Import Section for Autoridades -->
+          <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #5c6bc0;">
+            <h3 style="margin-top: 0; color: #1a237e;">📊 Importar Excel</h3>
+            <p style="color: #666; margin-bottom: 15px;">Faça upload de um arquivo Excel (.xlsx) para cadastrar múltiplas autoridades de uma vez.</p>
+            <div style="margin-bottom: 10px;">
+              <strong>Formato esperado:</strong>
+              <ul style="margin: 5px 0; color: #666;">
+                <li>Nome (obrigatório)</li>
+                <li>Cargo / Instituição (obrigatório)</li>
+                <li>Email / E-mail (opcional)</li>
+                <li>Telefone / Celular (opcional)</li>
+              </ul>
+            </div>
+            <input type="file" id="excelFileAutoridades" accept=".xlsx,.xls" style="padding: 8px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+            <button class="btn btn-primary" onclick="processExcelFile('autoridades')" style="margin-left: 10px;">📤 Processar Arquivo</button>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1730,6 +1764,23 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('honra')" style="margin-top: 20px;">✨ Adicionar Homenageado</button>
+          
+          <!-- Excel Import Section for Honra ao Mérito -->
+          <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #5c6bc0;">
+            <h3 style="margin-top: 0; color: #1a237e;">📊 Importar Excel</h3>
+            <p style="color: #666; margin-bottom: 15px;">Faça upload de um arquivo Excel (.xlsx) para cadastrar múltiplos homenageados de uma vez.</p>
+            <div style="margin-bottom: 10px;">
+              <strong>Formato esperado:</strong>
+              <ul style="margin: 5px 0; color: #666;">
+                <li>Nome (obrigatório)</li>
+                <li>Categoria (Científica, Política ou Social - opcional, padrão: Científica)</li>
+                <li>Email / E-mail (opcional)</li>
+                <li>Telefone / Celular (opcional)</li>
+              </ul>
+            </div>
+            <input type="file" id="excelFileHonra" accept=".xlsx,.xls" style="padding: 8px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+            <button class="btn btn-primary" onclick="processExcelFile('honra')" style="margin-left: 10px;">📤 Processar Arquivo</button>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1830,6 +1881,23 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Extra Guests -->
+  <div id="extraGuestsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 12px; padding: 30px; max-width: 600px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <h2 style="margin-top: 0; color: #1a237e;">👥 Gerenciar Convidados Extras</h2>
+      <p id="extraGuestsMessage" style="color: #666; margin-bottom: 20px;"></p>
+      
+      <div id="extraGuestsFields">
+        <!-- Extra guest fields will be added here dynamically -->
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 25px; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="closeExtraGuestsModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="saveExtraGuests()">💾 Salvar</button>
       </div>
     </div>
   </div>
@@ -2446,6 +2514,144 @@
       updateStatistics(type);
     }
 
+    // Process Excel file for bulk import
+    function processExcelFile(type) {
+      const fileInput = document.getElementById(`excelFile${type.charAt(0).toUpperCase() + type.slice(1)}`);
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        alert('Por favor, selecione um arquivo Excel primeiro.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          
+          // Get first sheet
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          
+          // Convert to JSON
+          const jsonData = XLSX.utils.sheet_to_json(worksheet);
+          
+          if (jsonData.length === 0) {
+            alert('O arquivo Excel está vazio ou não contém dados válidos.');
+            return;
+          }
+          
+          // Helper function to find column value (case insensitive)
+          const findColumn = (row, possibleNames) => {
+            for (let key in row) {
+              if (possibleNames.some(name => key.toLowerCase().includes(name.toLowerCase()))) {
+                return row[key];
+              }
+            }
+            return null;
+          };
+          
+          let successCount = 0;
+          let errorCount = 0;
+          const errors = [];
+          
+          jsonData.forEach((row, index) => {
+            try {
+              // Extract common fields
+              const nome = findColumn(row, ['nome', 'name', 'convidado', 'participante']);
+              const email = findColumn(row, ['email', 'e-mail', 'mail']);
+              const telefone = findColumn(row, ['telefone', 'celular', 'phone', 'tel', 'whatsapp', 'fone']);
+              
+              if (!nome || nome.toString().trim() === '') {
+                errors.push(`Linha ${index + 2}: Nome é obrigatório`);
+                errorCount++;
+                return;
+              }
+              
+              let guest = {
+                nome: nome.toString().trim(),
+                email: email ? email.toString().trim() : '',
+                telefone: telefone ? telefone.toString().trim() : '',
+                whatsapp: telefone ? telefone.toString().trim() : '',
+                enviado: false,
+                recebido: false,
+                confirmado: false
+              };
+              
+              // Type-specific fields
+              if (type === 'remidos') {
+                const cro = findColumn(row, ['cro', 'nº cro', 'numero cro', 'cro/rs', 'numero', 'n cro']);
+                if (!cro || cro.toString().trim() === '') {
+                  errors.push(`Linha ${index + 2}: CRO/RS é obrigatório para Remidos`);
+                  errorCount++;
+                  return;
+                }
+                guest.cro = cro.toString().trim();
+              } else if (type === 'autoridades') {
+                const cargo = findColumn(row, ['cargo', 'instituição', 'instituicao', 'position', 'title']);
+                if (!cargo || cargo.toString().trim() === '') {
+                  errors.push(`Linha ${index + 2}: Cargo/Instituição é obrigatório para Autoridades`);
+                  errorCount++;
+                  return;
+                }
+                guest.cargo = cargo.toString().trim();
+              } else if (type === 'honra') {
+                const categoriaValue = findColumn(row, ['categoria', 'category', 'tipo']);
+                let categoria = 'cientifico'; // Default
+                if (categoriaValue) {
+                  const catStr = categoriaValue.toString().toLowerCase();
+                  if (catStr.includes('polít') || catStr.includes('polit')) {
+                    categoria = 'politico';
+                  } else if (catStr.includes('social')) {
+                    categoria = 'social';
+                  } else if (catStr.includes('científ') || catStr.includes('cienti')) {
+                    categoria = 'cientifico';
+                  }
+                }
+                guest.categoria = categoria;
+              }
+              
+              guestsData[type].push(guest);
+              successCount++;
+            } catch (err) {
+              errors.push(`Linha ${index + 2}: ${err.message}`);
+              errorCount++;
+            }
+          });
+          
+          // Save and update UI
+          saveGuests();
+          renderTable(type);
+          updateStatistics(type);
+          
+          // Show results
+          let message = `Importação concluída!\n\n`;
+          message += `✓ ${successCount} participante(s) importado(s) com sucesso\n`;
+          if (errorCount > 0) {
+            message += `✗ ${errorCount} erro(s) encontrado(s)\n\n`;
+            if (errors.length > 0) {
+              message += `Detalhes dos erros:\n${errors.slice(0, 10).join('\n')}`;
+              if (errors.length > 10) {
+                message += `\n... e mais ${errors.length - 10} erro(s)`;
+              }
+            }
+          }
+          
+          alert(message);
+          
+          // Clear file input
+          fileInput.value = '';
+          
+        } catch (error) {
+          console.error('Erro ao processar arquivo Excel:', error);
+          alert('Erro ao processar arquivo Excel. Verifique se o formato está correto.\n\nDetalhes: ' + error.message);
+        }
+      };
+      
+      reader.readAsArrayBuffer(file);
+    }
+
     // Delete guest
     function deleteGuest(type, index) {
       if (confirm('Tem certeza que deseja remover este convidado?')) {
@@ -2485,10 +2691,113 @@
 
     // Update status
     function updateStatus(type, index, field, value) {
+      const wasConfirmed = guestsData[type][index][field];
       guestsData[type][index][field] = value === 'true';
+      
+      // If confirming presence for remidos or honra, prompt for extra guests
+      if (field === 'confirmado' && value === 'true' && !wasConfirmed && (type === 'remidos' || type === 'honra')) {
+        saveGuests();
+        renderTable(type);
+        updateStatistics(type);
+        // Open extra guests modal
+        setTimeout(() => manageExtraGuests(type, index), 100);
+        return;
+      }
+      
       saveGuests();
       renderTable(type);
       updateStatistics(type);
+    }
+
+    // Manage extra guests modal
+    let currentExtraGuestsType = null;
+    let currentExtraGuestsIndex = null;
+    
+    function manageExtraGuests(type, index) {
+      currentExtraGuestsType = type;
+      currentExtraGuestsIndex = index;
+      
+      const guest = guestsData[type][index];
+      const maxGuests = type === 'remidos' ? 1 : (type === 'honra' ? 2 : 0);
+      
+      if (maxGuests === 0) {
+        return; // No extra guests allowed for this type
+      }
+      
+      // Set message
+      const message = document.getElementById('extraGuestsMessage');
+      message.textContent = `${guest.nome} pode trazer até ${maxGuests} convidado(s) extra(s).`;
+      
+      // Create input fields
+      const fieldsContainer = document.getElementById('extraGuestsFields');
+      fieldsContainer.innerHTML = '';
+      
+      // Initialize extra guests array if not exists
+      if (!guest.convidadosExtras) {
+        guest.convidadosExtras = [];
+      }
+      
+      for (let i = 0; i < maxGuests; i++) {
+        const fieldDiv = document.createElement('div');
+        fieldDiv.style.marginBottom = '15px';
+        
+        const label = document.createElement('label');
+        label.textContent = `Nome do Convidado Extra ${i + 1}:`;
+        label.style.display = 'block';
+        label.style.marginBottom = '5px';
+        label.style.color = '#333';
+        label.style.fontWeight = '500';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `extraGuest${i}`;
+        input.placeholder = `Digite o nome do convidado extra ${i + 1} (opcional)`;
+        input.value = guest.convidadosExtras[i] || '';
+        input.style.width = '100%';
+        input.style.padding = '10px';
+        input.style.border = '1px solid #ddd';
+        input.style.borderRadius = '4px';
+        input.style.fontSize = '14px';
+        
+        fieldDiv.appendChild(label);
+        fieldDiv.appendChild(input);
+        fieldsContainer.appendChild(fieldDiv);
+      }
+      
+      // Show modal
+      const modal = document.getElementById('extraGuestsModal');
+      modal.style.display = 'flex';
+    }
+    
+    function saveExtraGuests() {
+      if (currentExtraGuestsType === null || currentExtraGuestsIndex === null) {
+        return;
+      }
+      
+      const guest = guestsData[currentExtraGuestsType][currentExtraGuestsIndex];
+      const maxGuests = currentExtraGuestsType === 'remidos' ? 1 : (currentExtraGuestsType === 'honra' ? 2 : 0);
+      
+      guest.convidadosExtras = [];
+      for (let i = 0; i < maxGuests; i++) {
+        const input = document.getElementById(`extraGuest${i}`);
+        const value = input.value.trim();
+        if (value) {
+          guest.convidadosExtras.push(value);
+        }
+      }
+      
+      saveGuests();
+      renderTable(currentExtraGuestsType);
+      closeExtraGuestsModal();
+      
+      alert('Convidados extras salvos com sucesso!');
+    }
+    
+    function closeExtraGuestsModal() {
+      const modal = document.getElementById('extraGuestsModal');
+      modal.style.display = 'none';
+      currentExtraGuestsType = null;
+      currentExtraGuestsIndex = null;
     }
 
     // Render table
@@ -2513,8 +2822,14 @@
           secondColumn = categorias[guest.categoria] || guest.categoria;
         }
         
+        // Build extra guests display
+        let extraGuestsDisplay = '';
+        if (guest.confirmado && guest.convidadosExtras && guest.convidadosExtras.length > 0) {
+          extraGuestsDisplay = `<br><small style="color: #666;">👥 Extras: ${guest.convidadosExtras.join(', ')}</small>`;
+        }
+        
         row.innerHTML = `
-          <td>${guest.nome}</td>
+          <td>${guest.nome}${extraGuestsDisplay}</td>
           <td>${secondColumn}</td>
           <td>${guest.email || '-'}</td>
           <td>${guest.telefone || '-'}</td>
@@ -2536,6 +2851,9 @@
               <option value="false" ${!guest.confirmado ? 'selected' : ''}>Não Confirmado</option>
               <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
             </select>
+            ${(type === 'remidos' || type === 'honra') && guest.confirmado ? `
+              <button class="action-btn" onclick="manageExtraGuests('${type}', ${index})" style="margin-top: 5px; font-size: 0.85em;">👥 Convidados Extras</button>
+            ` : ''}
           </td>
           <td>
             <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
@@ -2603,6 +2921,8 @@
               <div class="guest-detail"><span class="icon-email"></span> ${guest.email || 'N/A'}</div>
               <div class="guest-detail"><span class="icon-phone"></span> ${guest.telefone || 'N/A'}</div>
               <div class="guest-detail">📱 WhatsApp: ${guest.whatsapp || 'N/A'}</div>
+              ${guest.confirmado && guest.convidadosExtras && guest.convidadosExtras.length > 0 ? 
+                `<div class="guest-detail" style="color: #5c6bc0; font-weight: 500;">👥 Extras: ${guest.convidadosExtras.join(', ')}</div>` : ''}
             </div>
           </div>
           <div class="guest-status-row">
@@ -2852,7 +3172,15 @@
         const statusConfirmado = guest.confirmado ? '✓ Confirmado' : '✗ Não Confirmado';
         
         pdf.text(`   Convite: ${statusEnviado} | Recebimento: ${statusRecebido} | Presença: ${statusConfirmado}`, margin, yPosition);
-        yPosition += 8;
+        yPosition += 5;
+        
+        // Extra guests information
+        if (guest.confirmado && guest.convidadosExtras && guest.convidadosExtras.length > 0) {
+          pdf.text(`   Convidados Extras: ${guest.convidadosExtras.join(', ')}`, margin, yPosition);
+          yPosition += 5;
+        }
+        
+        yPosition += 3;
       });
       
       // Footer
