@@ -1396,7 +1396,10 @@
             <p>CRO/RS</p>
           </div>
         </div>
-        <button class="btn btn-secondary" onclick="backToWelcome()" style="margin-left: auto;">Voltar</button>
+        <div style="margin-left: auto; display: flex; gap: 10px;">
+          <button class="btn" onclick="deleteAllDatabase()" style="background: #ef5350; color: white;">🗑️ Excluir Banco de Dados</button>
+          <button class="btn btn-secondary" onclick="backToWelcome()">Voltar</button>
+        </div>
       </div>
     </div>
 
@@ -1473,8 +1476,8 @@
               <input type="file" id="remidosExcelFile" accept=".xlsx,.xls,.csv" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
               <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
                 <strong>Formatos aceitos:</strong> Excel (.xlsx, .xls) ou CSV (.csv)<br>
-                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: nome, cro, CATEGORIA, telefone, email, NASCIMENTO, ENDEREÇO<br>
-                <strong>Como usar:</strong> Selecione o arquivo e os dados serão importados automaticamente.<br>
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: <strong>nome</strong> e <strong>cro</strong> (obrigatórias). Demais campos serão ignorados na importação.<br>
+                <strong>Como usar:</strong> Selecione o arquivo e apenas nome e CRO serão importados automaticamente. Outros dados devem ser preenchidos manualmente.<br>
                 <a href="#" onclick="downloadTemplate('remidos'); return false;" style="color: #1a237e; font-weight: bold;">⬇️ Baixar modelo de exemplo</a>
               </small>
             </div>
@@ -2443,6 +2446,35 @@
       localStorage.setItem('cro_guests_data', JSON.stringify(guestsData));
     }
 
+    // Delete all database with password protection
+    function deleteAllDatabase() {
+      const password = prompt('⚠️ ATENÇÃO: Esta ação irá excluir todos os dados de convidados!\n\nPara confirmar, digite a senha:');
+      
+      if (password === null) {
+        // User cancelled
+        return;
+      }
+      
+      if (password === 'odonto@@2025') {
+        if (confirm('Tem certeza que deseja excluir todos os dados? Esta ação não pode ser desfeita!')) {
+          // Clear all guest data
+          guestsData = {
+            remidos: [],
+            autoridades: [],
+            honra: []
+          };
+          saveGuests();
+          renderAllTables();
+          updateStatistics('remidos');
+          updateStatistics('autoridades');
+          updateStatistics('honra');
+          alert('✅ Banco de dados excluído com sucesso!');
+        }
+      } else {
+        alert('❌ Senha incorreta! O banco de dados não foi excluído.');
+      }
+    }
+
     // Tab management
     function showTab(tabName) {
       // Hide all tabs
@@ -2831,14 +2863,14 @@
             </div>
           </div>
           <div class="guest-status-row">
-            <span class="status-badge ${guest.conviteEnviado ? 'sent' : 'pending'}">
-              ${guest.conviteEnviado ? '✓ Enviado' : '⏳ Pendente'}
+            <span class="status-badge ${guest.enviado ? 'sent' : 'pending'}">
+              ${guest.enviado ? '✅ Enviado' : '⏳ Pendente'}
             </span>
-            <span class="status-badge ${guest.recebimento ? 'confirmed' : 'pending'}">
-              ${guest.recebimento ? '✓ Recebido' : '⏳ Aguardando'}
+            <span class="status-badge ${guest.recebido ? 'confirmed' : 'pending'}">
+              ${guest.recebido ? '✅ Recebido' : '⏳ Aguardando'}
             </span>
-            <span class="status-badge ${guest.presenca ? 'confirmed' : 'pending'}">
-              ${guest.presenca ? '✓ Confirmado' : '❓ Não confirmado'}
+            <span class="status-badge ${guest.confirmado ? 'confirmed' : 'pending'}">
+              ${guest.confirmado ? '✅ Confirmado' : '❓ Não confirmado'}
             </span>
           </div>
           <div class="guest-actions">
@@ -3228,58 +3260,16 @@
                       return;
                     }
                     
-                    // Get new fields
-                    const categoria = findColumn(row, ['categoria', 'category']);
-                    let categoriaValue = '';
-                    if (categoria) {
-                      const catStr = String(categoria).toLowerCase();
-                      if (catStr.includes('científ') || catStr.includes('cientif')) {
-                        categoriaValue = 'cientifico';
-                      } else if (catStr.includes('polít') || catStr.includes('polit')) {
-                        categoriaValue = 'politico';
-                      } else if (catStr.includes('social')) {
-                        categoriaValue = 'social';
-                      } else if (catStr.includes('outro') || catStr.includes('other')) {
-                        categoriaValue = 'outro';
-                      } else {
-                        categoriaValue = 'outro';
-                      }
-                    }
-                    
-                    const nascimento = findColumn(row, ['nascimento', 'data de nascimento', 'data nascimento', 'birth', 'birthday', 'data_nascimento']);
-                    let nascimentoValue = '';
-                    if (nascimento) {
-                      // Try to parse date
-                      try {
-                        // If it's an Excel date number
-                        if (typeof nascimento === 'number') {
-                          const date = new Date((nascimento - 25569) * 86400 * 1000);
-                          nascimentoValue = date.toISOString().split('T')[0];
-                        } else {
-                          // Try to parse string date
-                          const parsed = new Date(nascimento);
-                          if (!isNaN(parsed.getTime())) {
-                            nascimentoValue = parsed.toISOString().split('T')[0];
-                          } else {
-                            nascimentoValue = String(nascimento);
-                          }
-                        }
-                      } catch (e) {
-                        nascimentoValue = String(nascimento);
-                      }
-                    }
-                    
-                    const endereco = findColumn(row, ['endereço', 'endereco', 'address', 'rua']);
-                    
+                    // For Remidos, only auto-fill name and CRO number, ignoring other fields
                     guest = {
                       nome: String(nome).trim(),
                       cro: String(cro).trim(),
-                      categoria: categoriaValue,
-                      email: email ? String(email).trim() : '',
-                      telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
-                      whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
-                      nascimento: nascimentoValue,
-                      endereco: endereco ? String(endereco).trim() : '',
+                      categoria: '',
+                      email: '',
+                      telefone: '',
+                      whatsapp: '',
+                      nascimento: '',
+                      endereco: '',
                       enviado: false,
                       recebido: false,
                       confirmado: false,
