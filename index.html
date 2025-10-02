@@ -1421,6 +1421,16 @@
               <input type="text" id="remidosCRO" placeholder="Ex: 12345">
             </div>
             <div class="form-group-enhanced">
+              <label>🏷️ Categoria:</label>
+              <select id="remidosCategoria" style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px;">
+                <option value="">Selecione...</option>
+                <option value="cientifico">Científica</option>
+                <option value="politico">Política</option>
+                <option value="social">Social</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-group-enhanced">
               <label><span class="icon-email"></span> E-mail:</label>
               <input type="email" id="remidosEmail" placeholder="exemplo@email.com">
             </div>
@@ -1431,6 +1441,14 @@
             <div class="form-group-enhanced">
               <label>📱 WhatsApp:</label>
               <input type="tel" id="remidosWhatsapp" placeholder="(51) 99999-9999">
+            </div>
+            <div class="form-group-enhanced">
+              <label>🎂 Data de Nascimento:</label>
+              <input type="date" id="remidosNascimento" style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            </div>
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📍 Endereço:</label>
+              <input type="text" id="remidosEndereco" placeholder="Rua, número, bairro, cidade">
             </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
@@ -1451,11 +1469,13 @@
           
           <div class="form-grid" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
             <div class="form-group-enhanced" style="grid-column: 1 / -1;">
-              <label>📊 Importar Lista em Excel:</label>
-              <input type="file" id="remidosExcelFile" accept=".xlsx,.xls" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
+              <label>📊 Importar Lista em Excel/CSV:</label>
+              <input type="file" id="remidosExcelFile" accept=".xlsx,.xls,.csv" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
               <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
-                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: Nome, Nº CRO (ou CRO), Email, Telefone celular (ou Telefone)<br>
-                <strong>Como usar:</strong> Selecione o arquivo Excel e os dados serão importados automaticamente.
+                <strong>Formatos aceitos:</strong> Excel (.xlsx, .xls) ou CSV (.csv)<br>
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: nome, cro, CATEGORIA, telefone, email, NASCIMENTO, ENDEREÇO<br>
+                <strong>Como usar:</strong> Selecione o arquivo e os dados serão importados automaticamente.<br>
+                <a href="#" onclick="downloadTemplate('remidos'); return false;" style="color: #1a237e; font-weight: bold;">⬇️ Baixar modelo de exemplo</a>
               </small>
             </div>
           </div>
@@ -1544,9 +1564,12 @@
                 <tr>
                   <th>Nome</th>
                   <th>CRO/RS</th>
+                  <th>Categoria</th>
                   <th>E-mail</th>
                   <th>Telefone</th>
                   <th>WhatsApp</th>
+                  <th>Nascimento</th>
+                  <th>Endereço</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -2442,23 +2465,29 @@
       if (type === 'remidos') {
         const nome = document.getElementById('remidosNome').value.trim();
         const cro = document.getElementById('remidosCRO').value.trim();
+        const categoria = document.getElementById('remidosCategoria').value;
         const email = document.getElementById('remidosEmail').value.trim();
         const telefone = document.getElementById('remidosTelefone').value.trim();
         const whatsapp = document.getElementById('remidosWhatsapp').value.trim();
+        const nascimento = document.getElementById('remidosNascimento').value;
+        const endereco = document.getElementById('remidosEndereco').value.trim();
         
         if (!nome || !cro) {
           alert('Por favor, preencha o nome e o CRO/RS');
           return;
         }
         
-        guest = { nome, cro, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 1 };
+        guest = { nome, cro, categoria, email, telefone, whatsapp, nascimento, endereco, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 1 };
         
         // Clear form
         document.getElementById('remidosNome').value = '';
         document.getElementById('remidosCRO').value = '';
+        document.getElementById('remidosCategoria').value = '';
         document.getElementById('remidosEmail').value = '';
         document.getElementById('remidosTelefone').value = '';
         document.getElementById('remidosWhatsapp').value = '';
+        document.getElementById('remidosNascimento').value = '';
+        document.getElementById('remidosEndereco').value = '';
       } else if (type === 'autoridades') {
         const nome = document.getElementById('autoridadesNome').value.trim();
         const cargo = document.getElementById('autoridadesCargo').value.trim();
@@ -2523,9 +2552,12 @@
       if (type === 'remidos') {
         document.getElementById('remidosNome').value = guest.nome;
         document.getElementById('remidosCRO').value = guest.cro;
+        document.getElementById('remidosCategoria').value = guest.categoria || '';
         document.getElementById('remidosEmail').value = guest.email || '';
         document.getElementById('remidosTelefone').value = guest.telefone || '';
         document.getElementById('remidosWhatsapp').value = guest.whatsapp || '';
+        document.getElementById('remidosNascimento').value = guest.nascimento || '';
+        document.getElementById('remidosEndereco').value = guest.endereco || '';
       } else if (type === 'autoridades') {
         document.getElementById('autoridadesNome').value = guest.nome;
         document.getElementById('autoridadesCargo').value = guest.cargo;
@@ -2577,8 +2609,16 @@
         const row = document.createElement('tr');
         
         let secondColumn = '';
+        let thirdColumn = '';
         if (type === 'remidos') {
           secondColumn = guest.cro;
+          const categoriaLabels = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social',
+            'outro': 'Outro'
+          };
+          thirdColumn = guest.categoria ? (categoriaLabels[guest.categoria] || guest.categoria) : '-';
         } else if (type === 'autoridades') {
           secondColumn = guest.cargo;
         } else if (type === 'honra') {
@@ -2613,36 +2653,84 @@
           extraGuestsColumn = '<span style="color: #999;">N/A</span>';
         }
         
-        row.innerHTML = `
-          <td>${guest.nome}</td>
-          <td>${secondColumn}</td>
-          <td>${guest.email || '-'}</td>
-          <td>${guest.telefone || '-'}</td>
-          <td>${guest.whatsapp || '-'}</td>
-          <td>
-            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
-              <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
-              <option value="true" ${guest.enviado ? 'selected' : ''}>Enviado</option>
-            </select>
-          </td>
-          <td>
-            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'recebido', this.value)">
-              <option value="false" ${!guest.recebido ? 'selected' : ''}>Não Confirmado</option>
-              <option value="true" ${guest.recebido ? 'selected' : ''}>Confirmado</option>
-            </select>
-          </td>
-          <td>
-            <select class="status-select" onchange="updateStatus('${type}', ${index}, 'confirmado', this.value)">
-              <option value="false" ${!guest.confirmado ? 'selected' : ''}>Não Confirmado</option>
-              <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
-            </select>
-          </td>
-          <td>${extraGuestsColumn}</td>
-          <td>
-            <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
-            <button class="action-btn delete" onclick="deleteGuest('${type}', ${index})">Excluir</button>
-          </td>
-        `;
+        // Format birth date if available
+        let nascimentoFormatted = '-';
+        if (type === 'remidos' && guest.nascimento) {
+          try {
+            const date = new Date(guest.nascimento);
+            nascimentoFormatted = date.toLocaleDateString('pt-BR');
+          } catch (e) {
+            nascimentoFormatted = guest.nascimento;
+          }
+        }
+        
+        // Build row based on type
+        if (type === 'remidos') {
+          row.innerHTML = `
+            <td>${guest.nome}</td>
+            <td>${secondColumn}</td>
+            <td>${thirdColumn}</td>
+            <td>${guest.email || '-'}</td>
+            <td>${guest.telefone || '-'}</td>
+            <td>${guest.whatsapp || '-'}</td>
+            <td>${nascimentoFormatted}</td>
+            <td>${guest.endereco || '-'}</td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
+                <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
+                <option value="true" ${guest.enviado ? 'selected' : ''}>Enviado</option>
+              </select>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'recebido', this.value)">
+                <option value="false" ${!guest.recebido ? 'selected' : ''}>Não Confirmado</option>
+                <option value="true" ${guest.recebido ? 'selected' : ''}>Confirmado</option>
+              </select>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'confirmado', this.value)">
+                <option value="false" ${!guest.confirmado ? 'selected' : ''}>Não Confirmado</option>
+                <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
+              </select>
+            </td>
+            <td>${extraGuestsColumn}</td>
+            <td>
+              <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
+              <button class="action-btn delete" onclick="deleteGuest('${type}', ${index})">Excluir</button>
+            </td>
+          `;
+        } else {
+          row.innerHTML = `
+            <td>${guest.nome}</td>
+            <td>${secondColumn}</td>
+            <td>${guest.email || '-'}</td>
+            <td>${guest.telefone || '-'}</td>
+            <td>${guest.whatsapp || '-'}</td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
+                <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
+                <option value="true" ${guest.enviado ? 'selected' : ''}>Enviado</option>
+              </select>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'recebido', this.value)">
+                <option value="false" ${!guest.recebido ? 'selected' : ''}>Não Confirmado</option>
+                <option value="true" ${guest.recebido ? 'selected' : ''}>Confirmado</option>
+              </select>
+            </td>
+            <td>
+              <select class="status-select" onchange="updateStatus('${type}', ${index}, 'confirmado', this.value)">
+                <option value="false" ${!guest.confirmado ? 'selected' : ''}>Não Confirmado</option>
+                <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
+              </select>
+            </td>
+            <td>${extraGuestsColumn}</td>
+            <td>
+              <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
+              <button class="action-btn delete" onclick="deleteGuest('${type}', ${index})">Excluir</button>
+            </td>
+          `;
+        }
         
         tbody.appendChild(row);
       });
@@ -2677,8 +2765,26 @@
         // Build card HTML
         let detailsHTML = '';
         if (type === 'remidos') {
+          const categoriaLabels = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social',
+            'outro': 'Outro'
+          };
+          let nascimentoStr = '';
+          if (guest.nascimento) {
+            try {
+              const date = new Date(guest.nascimento);
+              nascimentoStr = date.toLocaleDateString('pt-BR');
+            } catch (e) {
+              nascimentoStr = guest.nascimento;
+            }
+          }
           detailsHTML = `
             <div class="guest-detail"><span class="icon-id"></span> CRO/RS: ${guest.cro || 'N/A'}</div>
+            ${guest.categoria ? `<div class="guest-detail">🏷️ Categoria: ${categoriaLabels[guest.categoria] || guest.categoria}</div>` : ''}
+            ${nascimentoStr ? `<div class="guest-detail">🎂 Nascimento: ${nascimentoStr}</div>` : ''}
+            ${guest.endereco ? `<div class="guest-detail">📍 Endereço: ${guest.endereco}</div>` : ''}
           `;
         } else if (type === 'autoridades') {
           detailsHTML = `
@@ -2991,6 +3097,54 @@
       alert(`Relatório gerado com sucesso! ${dataToReport.length} convidados incluídos.`);
     }
 
+    // Download Template Function
+    function downloadTemplate(type) {
+      if (type === 'remidos') {
+        // Create template data
+        const templateData = [
+          {
+            'nome': 'João da Silva',
+            'cro': '12345',
+            'CATEGORIA': 'Científica',
+            'telefone': '(51) 99999-9999',
+            'email': 'joao@example.com',
+            'NASCIMENTO': '1980-01-15',
+            'ENDEREÇO': 'Rua Exemplo, 123 - Centro - Porto Alegre/RS'
+          },
+          {
+            'nome': 'Maria Santos',
+            'cro': '67890',
+            'CATEGORIA': 'Social',
+            'telefone': '(51) 98888-8888',
+            'email': 'maria@example.com',
+            'NASCIMENTO': '1985-05-20',
+            'ENDEREÇO': 'Av. Protásio Alves, 456 - Petrópolis - Porto Alegre/RS'
+          }
+        ];
+        
+        // Create workbook
+        const ws = XLSX.utils.json_to_sheet(templateData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Remidos');
+        
+        // Download Excel file
+        XLSX.writeFile(wb, 'template_remidos.xlsx');
+        
+        // Also create CSV
+        const csvContent = 'nome,cro,CATEGORIA,telefone,email,NASCIMENTO,ENDEREÇO\n' +
+          'João da Silva,12345,Científica,(51) 99999-9999,joao@example.com,1980-01-15,"Rua Exemplo, 123 - Centro - Porto Alegre/RS"\n' +
+          'Maria Santos,67890,Social,(51) 98888-8888,maria@example.com,1985-05-20,"Av. Protásio Alves, 456 - Petrópolis - Porto Alegre/RS"';
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'template_remidos.csv';
+        link.click();
+        
+        alert('✅ Modelos baixados com sucesso!\n\nForam baixados dois arquivos:\n• template_remidos.xlsx (Excel)\n• template_remidos.csv (CSV)\n\nUse qualquer um deles como exemplo para importar seus dados.');
+      }
+    }
+
     // Excel Import Functionality for Guest Management
     function setupExcelImport(type) {
       const fileInputId = type + 'ExcelFile';
@@ -3002,18 +3156,42 @@
         const file = e.target.files[0];
         if (!file) return;
         
+        const isCSV = file.name.toLowerCase().endsWith('.csv');
         const reader = new FileReader();
+        
         reader.onload = function(e) {
           try {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
+            let jsonData;
             
-            // Get first sheet
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            
-            // Convert to JSON
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            if (isCSV) {
+              // Handle CSV file
+              const text = e.target.result;
+              const lines = text.split('\n');
+              const headers = lines[0].split(',').map(h => h.trim().replace(/["\r]/g, ''));
+              
+              jsonData = [];
+              for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const values = lines[i].split(',').map(v => v.trim().replace(/["\r]/g, ''));
+                const row = {};
+                headers.forEach((header, index) => {
+                  row[header] = values[index] || '';
+                });
+                jsonData.push(row);
+              }
+            } else {
+              // Handle Excel file
+              const data = new Uint8Array(e.target.result);
+              const workbook = XLSX.read(data, { type: 'array' });
+              
+              // Get first sheet
+              const firstSheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[firstSheetName];
+              
+              // Convert to JSON
+              jsonData = XLSX.utils.sheet_to_json(worksheet);
+            }
             
             if (jsonData.length > 0) {
               let importCount = 0;
@@ -3049,12 +3227,59 @@
                       errors.push(`Linha ${index + 2}: CRO não encontrado para ${nome}`);
                       return;
                     }
+                    
+                    // Get new fields
+                    const categoria = findColumn(row, ['categoria', 'category']);
+                    let categoriaValue = '';
+                    if (categoria) {
+                      const catStr = String(categoria).toLowerCase();
+                      if (catStr.includes('científ') || catStr.includes('cientif')) {
+                        categoriaValue = 'cientifico';
+                      } else if (catStr.includes('polít') || catStr.includes('polit')) {
+                        categoriaValue = 'politico';
+                      } else if (catStr.includes('social')) {
+                        categoriaValue = 'social';
+                      } else if (catStr.includes('outro') || catStr.includes('other')) {
+                        categoriaValue = 'outro';
+                      } else {
+                        categoriaValue = 'outro';
+                      }
+                    }
+                    
+                    const nascimento = findColumn(row, ['nascimento', 'data de nascimento', 'data nascimento', 'birth', 'birthday', 'data_nascimento']);
+                    let nascimentoValue = '';
+                    if (nascimento) {
+                      // Try to parse date
+                      try {
+                        // If it's an Excel date number
+                        if (typeof nascimento === 'number') {
+                          const date = new Date((nascimento - 25569) * 86400 * 1000);
+                          nascimentoValue = date.toISOString().split('T')[0];
+                        } else {
+                          // Try to parse string date
+                          const parsed = new Date(nascimento);
+                          if (!isNaN(parsed.getTime())) {
+                            nascimentoValue = parsed.toISOString().split('T')[0];
+                          } else {
+                            nascimentoValue = String(nascimento);
+                          }
+                        }
+                      } catch (e) {
+                        nascimentoValue = String(nascimento);
+                      }
+                    }
+                    
+                    const endereco = findColumn(row, ['endereço', 'endereco', 'address', 'rua']);
+                    
                     guest = {
                       nome: String(nome).trim(),
                       cro: String(cro).trim(),
+                      categoria: categoriaValue,
                       email: email ? String(email).trim() : '',
                       telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
                       whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      nascimento: nascimentoValue,
+                      endereco: endereco ? String(endereco).trim() : '',
                       enviado: false,
                       recebido: false,
                       confirmado: false,
@@ -3136,11 +3361,16 @@
             }
           } catch (error) {
             console.error('Erro ao processar arquivo:', error);
-            alert('❌ Erro ao processar arquivo Excel. Verifique se o formato está correto.\n\n' + error.message);
+            alert('❌ Erro ao processar arquivo. Verifique se o formato está correto.\n\n' + error.message);
           }
         };
         
-        reader.readAsArrayBuffer(file);
+        // Read file based on type
+        if (isCSV) {
+          reader.readAsText(file);
+        } else {
+          reader.readAsArrayBuffer(file);
+        }
       });
     }
     
