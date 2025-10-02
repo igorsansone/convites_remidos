@@ -1440,6 +1440,17 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('remidos')" style="margin-top: 20px;">✨ Adicionar Remido</button>
+          
+          <div class="form-grid" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📊 Importar Lista em Excel:</label>
+              <input type="file" id="remidosExcelFile" accept=".xlsx,.xls" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: Nome, Nº CRO (ou CRO), Email, Telefone celular (ou Telefone)<br>
+                <strong>Como usar:</strong> Selecione o arquivo Excel e os dados serão importados automaticamente.
+              </small>
+            </div>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1531,6 +1542,7 @@
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
+                  <th>Convidados Extras</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -1583,6 +1595,17 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('autoridades')" style="margin-top: 20px;">✨ Adicionar Autoridade</button>
+          
+          <div class="form-grid" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📊 Importar Lista em Excel:</label>
+              <input type="file" id="autoridadesExcelFile" accept=".xlsx,.xls" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: Nome, Cargo, Email, Telefone celular (ou Telefone)<br>
+                <strong>Como usar:</strong> Selecione o arquivo Excel e os dados serão importados automaticamente.
+              </small>
+            </div>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1674,6 +1697,7 @@
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
+                  <th>Convidados Extras</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -1730,6 +1754,17 @@
             </div>
           </div>
           <button class="btn btn-primary" onclick="addGuest('honra')" style="margin-top: 20px;">✨ Adicionar Homenageado</button>
+          
+          <div class="form-grid" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📊 Importar Lista em Excel:</label>
+              <input type="file" id="honraExcelFile" accept=".xlsx,.xls" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
+              <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: Nome, Categoria, Email, Telefone celular (ou Telefone)<br>
+                <strong>Como usar:</strong> Selecione o arquivo Excel e os dados serão importados automaticamente. A categoria pode ser: Científica, Política ou Social.
+              </small>
+            </div>
+          </div>
         </div>
 
         <div class="filters-stats-container">
@@ -1821,6 +1856,7 @@
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
+                  <th>Convidados Extras</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -2391,7 +2427,7 @@
           return;
         }
         
-        guest = { nome, cro, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, cro, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 1 };
         
         // Clear form
         document.getElementById('remidosNome').value = '';
@@ -2411,7 +2447,7 @@
           return;
         }
         
-        guest = { nome, cargo, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, cargo, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 0 };
         
         // Clear form
         document.getElementById('autoridadesNome').value = '';
@@ -2431,7 +2467,7 @@
           return;
         }
         
-        guest = { nome, categoria, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false };
+        guest = { nome, categoria, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 2 };
         
         // Clear form
         document.getElementById('honraNome').value = '';
@@ -2490,6 +2526,23 @@
       renderTable(type);
       updateStatistics(type);
     }
+    
+    // Update extra guests
+    function updateExtraGuests(type, index, value) {
+      const numGuests = parseInt(value);
+      const guest = guestsData[type][index];
+      
+      if (numGuests > guest.maxConvidadosExtras) {
+        alert(`Este convidado pode trazer no máximo ${guest.maxConvidadosExtras} convidado(s) extra(s).`);
+        renderTable(type);
+        return;
+      }
+      
+      guest.convidadosExtras = numGuests;
+      saveGuests();
+      renderTable(type);
+      renderCards(type);
+    }
 
     // Render table
     function renderTable(type) {
@@ -2511,6 +2564,29 @@
             'social': 'Social'
           };
           secondColumn = categorias[guest.categoria] || guest.categoria;
+        }
+        
+        // Ensure guest has extra guests properties
+        if (guest.convidadosExtras === undefined) guest.convidadosExtras = 0;
+        if (guest.maxConvidadosExtras === undefined) {
+          if (type === 'remidos') guest.maxConvidadosExtras = 1;
+          else if (type === 'honra') guest.maxConvidadosExtras = 2;
+          else guest.maxConvidadosExtras = 0;
+        }
+        
+        // Build extra guests column
+        let extraGuestsColumn = '';
+        if (guest.maxConvidadosExtras > 0) {
+          extraGuestsColumn = `
+            <select class="status-select" onchange="updateExtraGuests('${type}', ${index}, this.value)">
+              ${Array.from({length: guest.maxConvidadosExtras + 1}, (_, i) => 
+                `<option value="${i}" ${guest.convidadosExtras === i ? 'selected' : ''}>${i}</option>`
+              ).join('')}
+            </select>
+            <small style="display: block; margin-top: 3px; color: #666; font-size: 0.85em;">máx: ${guest.maxConvidadosExtras}</small>
+          `;
+        } else {
+          extraGuestsColumn = '<span style="color: #999;">N/A</span>';
         }
         
         row.innerHTML = `
@@ -2537,6 +2613,7 @@
               <option value="true" ${guest.confirmado ? 'selected' : ''}>Confirmado</option>
             </select>
           </td>
+          <td>${extraGuestsColumn}</td>
           <td>
             <button class="action-btn edit" onclick="editGuest('${type}', ${index})">Editar</button>
             <button class="action-btn delete" onclick="deleteGuest('${type}', ${index})">Excluir</button>
@@ -2594,6 +2671,23 @@
           `;
         }
         
+        // Add extra guests info if applicable
+        if (guest.maxConvidadosExtras === undefined) {
+          if (type === 'remidos') guest.maxConvidadosExtras = 1;
+          else if (type === 'honra') guest.maxConvidadosExtras = 2;
+          else guest.maxConvidadosExtras = 0;
+        }
+        if (guest.convidadosExtras === undefined) guest.convidadosExtras = 0;
+        
+        let extraGuestsHTML = '';
+        if (guest.maxConvidadosExtras > 0) {
+          extraGuestsHTML = `
+            <div class="guest-detail" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+              👥 Convidados Extras: ${guest.convidadosExtras}/${guest.maxConvidadosExtras}
+            </div>
+          `;
+        }
+        
         card.innerHTML = `
           <div class="guest-card-header">
             <div class="guest-avatar">${initials}</div>
@@ -2603,6 +2697,7 @@
               <div class="guest-detail"><span class="icon-email"></span> ${guest.email || 'N/A'}</div>
               <div class="guest-detail"><span class="icon-phone"></span> ${guest.telefone || 'N/A'}</div>
               <div class="guest-detail">📱 WhatsApp: ${guest.whatsapp || 'N/A'}</div>
+              ${extraGuestsHTML}
             </div>
           </div>
           <div class="guest-status-row">
@@ -2871,6 +2966,164 @@
       
       alert(`Relatório gerado com sucesso! ${dataToReport.length} convidados incluídos.`);
     }
+
+    // Excel Import Functionality for Guest Management
+    function setupExcelImport(type) {
+      const fileInputId = type + 'ExcelFile';
+      const fileInput = document.getElementById(fileInputId);
+      
+      if (!fileInput) return;
+      
+      fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            // Get first sheet
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            
+            // Convert to JSON
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            
+            if (jsonData.length > 0) {
+              let importCount = 0;
+              let errors = [];
+              
+              // Helper function to find column value with multiple possible names
+              const findColumn = (row, possibleNames) => {
+                for (let key in row) {
+                  if (possibleNames.some(name => key.toLowerCase().includes(name.toLowerCase()))) {
+                    return row[key];
+                  }
+                }
+                return '';
+              };
+              
+              jsonData.forEach((row, index) => {
+                try {
+                  const nome = findColumn(row, ['nome', 'name']);
+                  const email = findColumn(row, ['email', 'e-mail', 'mail']);
+                  const telefone = findColumn(row, ['telefone celular', 'telefone', 'celular', 'phone', 'tel']);
+                  const whatsapp = findColumn(row, ['whatsapp', 'zap', 'wpp']);
+                  
+                  if (!nome) {
+                    errors.push(`Linha ${index + 2}: Nome não encontrado`);
+                    return;
+                  }
+                  
+                  let guest = {};
+                  
+                  if (type === 'remidos') {
+                    const cro = findColumn(row, ['nº cro', 'cro', 'numero cro', 'cro/rs']);
+                    if (!cro) {
+                      errors.push(`Linha ${index + 2}: CRO não encontrado para ${nome}`);
+                      return;
+                    }
+                    guest = {
+                      nome: String(nome).trim(),
+                      cro: String(cro).trim(),
+                      email: email ? String(email).trim() : '',
+                      telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
+                      whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      enviado: false,
+                      recebido: false,
+                      confirmado: false,
+                      convidadosExtras: 0,
+                      maxConvidadosExtras: 1
+                    };
+                  } else if (type === 'autoridades') {
+                    const cargo = findColumn(row, ['cargo', 'instituição', 'instituicao', 'position']);
+                    if (!cargo) {
+                      errors.push(`Linha ${index + 2}: Cargo não encontrado para ${nome}`);
+                      return;
+                    }
+                    guest = {
+                      nome: String(nome).trim(),
+                      cargo: String(cargo).trim(),
+                      email: email ? String(email).trim() : '',
+                      telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
+                      whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      enviado: false,
+                      recebido: false,
+                      confirmado: false,
+                      convidadosExtras: 0,
+                      maxConvidadosExtras: 0
+                    };
+                  } else if (type === 'honra') {
+                    const categoria = findColumn(row, ['categoria', 'category']);
+                    let categoriaValue = 'cientifico'; // default
+                    
+                    if (categoria) {
+                      const catStr = String(categoria).toLowerCase();
+                      if (catStr.includes('científ') || catStr.includes('cientif')) {
+                        categoriaValue = 'cientifico';
+                      } else if (catStr.includes('polít') || catStr.includes('polit')) {
+                        categoriaValue = 'politico';
+                      } else if (catStr.includes('social')) {
+                        categoriaValue = 'social';
+                      }
+                    }
+                    
+                    guest = {
+                      nome: String(nome).trim(),
+                      categoria: categoriaValue,
+                      email: email ? String(email).trim() : '',
+                      telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
+                      whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      enviado: false,
+                      recebido: false,
+                      confirmado: false,
+                      convidadosExtras: 0,
+                      maxConvidadosExtras: 2
+                    };
+                  }
+                  
+                  guestsData[type].push(guest);
+                  importCount++;
+                } catch (error) {
+                  errors.push(`Linha ${index + 2}: Erro ao processar - ${error.message}`);
+                }
+              });
+              
+              saveGuests();
+              renderTable(type);
+              renderCards(type);
+              updateStatistics(type);
+              
+              let message = `✅ Importação concluída!\n${importCount} convidado(s) importado(s) com sucesso.`;
+              if (errors.length > 0) {
+                message += `\n\n⚠️ Erros encontrados (${errors.length}):\n` + errors.slice(0, 5).join('\n');
+                if (errors.length > 5) {
+                  message += `\n... e mais ${errors.length - 5} erro(s)`;
+                }
+              }
+              alert(message);
+              
+              // Clear file input
+              fileInput.value = '';
+            } else {
+              alert('❌ O arquivo Excel está vazio.');
+            }
+          } catch (error) {
+            console.error('Erro ao processar arquivo:', error);
+            alert('❌ Erro ao processar arquivo Excel. Verifique se o formato está correto.\n\n' + error.message);
+          }
+        };
+        
+        reader.readAsArrayBuffer(file);
+      });
+    }
+    
+    // Setup Excel import for all guest types
+    setupExcelImport('remidos');
+    setupExcelImport('autoridades');
+    setupExcelImport('honra');
 
     // Initialize on load
     loadGuests();
