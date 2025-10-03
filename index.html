@@ -1602,6 +1602,15 @@
               <input type="text" id="autoridadesCargo" placeholder="Ex: Prefeito de Porto Alegre">
             </div>
             <div class="form-group-enhanced">
+              <label><span class="icon-trophy"></span> Categoria:</label>
+              <select id="autoridadesCategoria">
+                <option value="cientifico">Científica</option>
+                <option value="politico">Política</option>
+                <option value="social">Social</option>
+                <option value="outro">Outro</option>
+              </select>
+            </div>
+            <div class="form-group-enhanced">
               <label><span class="icon-email"></span> E-mail:</label>
               <input type="email" id="autoridadesEmail" placeholder="exemplo@email.com">
             </div>
@@ -1612,6 +1621,14 @@
             <div class="form-group-enhanced">
               <label>📱 WhatsApp:</label>
               <input type="tel" id="autoridadesWhatsapp" placeholder="(51) 99999-9999">
+            </div>
+            <div class="form-group-enhanced">
+              <label>🎂 Data de Nascimento:</label>
+              <input type="date" id="autoridadesNascimento" style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            </div>
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📍 Endereço:</label>
+              <input type="text" id="autoridadesEndereco" placeholder="Rua, número, bairro, cidade">
             </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
@@ -1771,6 +1788,14 @@
             <div class="form-group-enhanced">
               <label>📱 WhatsApp:</label>
               <input type="tel" id="honraWhatsapp" placeholder="(51) 99999-9999">
+            </div>
+            <div class="form-group-enhanced">
+              <label>🎂 Data de Nascimento:</label>
+              <input type="date" id="honraNascimento" style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px;">
+            </div>
+            <div class="form-group-enhanced" style="grid-column: 1 / -1;">
+              <label>📍 Endereço:</label>
+              <input type="text" id="honraEndereco" placeholder="Rua, número, bairro, cidade">
             </div>
           </div>
           <div class="form-grid" style="margin-top: 20px;">
@@ -2523,42 +2548,53 @@
       } else if (type === 'autoridades') {
         const nome = document.getElementById('autoridadesNome').value.trim();
         const cargo = document.getElementById('autoridadesCargo').value.trim();
+        const categoria = document.getElementById('autoridadesCategoria').value;
         const email = document.getElementById('autoridadesEmail').value.trim();
         const telefone = document.getElementById('autoridadesTelefone').value.trim();
         const whatsapp = document.getElementById('autoridadesWhatsapp').value.trim();
+        const nascimento = document.getElementById('autoridadesNascimento').value;
+        const endereco = document.getElementById('autoridadesEndereco').value.trim();
         
         if (!nome || !cargo) {
           alert('Por favor, preencha o nome e o cargo');
           return;
         }
         
-        guest = { nome, cargo, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 0 };
+        guest = { nome, cargo, categoria, email, telefone, whatsapp, nascimento, endereco, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 0 };
         
         // Clear form
         document.getElementById('autoridadesNome').value = '';
         document.getElementById('autoridadesCargo').value = '';
+        document.getElementById('autoridadesCategoria').value = 'cientifico';
         document.getElementById('autoridadesEmail').value = '';
         document.getElementById('autoridadesTelefone').value = '';
         document.getElementById('autoridadesWhatsapp').value = '';
+        document.getElementById('autoridadesNascimento').value = '';
+        document.getElementById('autoridadesEndereco').value = '';
       } else if (type === 'honra') {
         const nome = document.getElementById('honraNome').value.trim();
         const categoria = document.getElementById('honraCategoria').value;
         const email = document.getElementById('honraEmail').value.trim();
         const telefone = document.getElementById('honraTelefone').value.trim();
         const whatsapp = document.getElementById('honraWhatsapp').value.trim();
+        const nascimento = document.getElementById('honraNascimento').value;
+        const endereco = document.getElementById('honraEndereco').value.trim();
         
         if (!nome) {
           alert('Por favor, preencha o nome');
           return;
         }
         
-        guest = { nome, categoria, email, telefone, whatsapp, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 2 };
+        guest = { nome, categoria, email, telefone, whatsapp, nascimento, endereco, enviado: false, recebido: false, confirmado: false, convidadosExtras: 0, maxConvidadosExtras: 2 };
         
         // Clear form
         document.getElementById('honraNome').value = '';
+        document.getElementById('honraCategoria').value = 'cientifico';
         document.getElementById('honraEmail').value = '';
         document.getElementById('honraTelefone').value = '';
         document.getElementById('honraWhatsapp').value = '';
+        document.getElementById('honraNascimento').value = '';
+        document.getElementById('honraEndereco').value = '';
       }
       
       guestsData[type].push(guest);
@@ -2595,15 +2631,20 @@
       } else if (type === 'autoridades') {
         document.getElementById('autoridadesNome').value = guest.nome;
         document.getElementById('autoridadesCargo').value = guest.cargo;
+        document.getElementById('autoridadesCategoria').value = guest.categoria || 'cientifico';
         document.getElementById('autoridadesEmail').value = guest.email || '';
         document.getElementById('autoridadesTelefone').value = guest.telefone || '';
         document.getElementById('autoridadesWhatsapp').value = guest.whatsapp || '';
+        document.getElementById('autoridadesNascimento').value = guest.nascimento || '';
+        document.getElementById('autoridadesEndereco').value = guest.endereco || '';
       } else if (type === 'honra') {
         document.getElementById('honraNome').value = guest.nome;
         document.getElementById('honraCategoria').value = guest.categoria;
         document.getElementById('honraEmail').value = guest.email || '';
         document.getElementById('honraTelefone').value = guest.telefone || '';
         document.getElementById('honraWhatsapp').value = guest.whatsapp || '';
+        document.getElementById('honraNascimento').value = guest.nascimento || '';
+        document.getElementById('honraEndereco').value = guest.endereco || '';
       }
       
       deleteGuest(type, index);
@@ -3372,12 +3413,65 @@
                       errors.push(`Linha ${index + 2}: Cargo não encontrado para ${nome}`);
                       return;
                     }
+                    
+                    // Import all available fields from the file
+                    const categoria = findColumn(row, ['categoria', 'category']);
+                    const nascimento = findColumn(row, ['nascimento', 'data de nascimento', 'birth', 'birthday', 'data_nascimento']);
+                    const endereco = findColumn(row, ['endereço', 'endereco', 'address', 'rua']);
+                    
+                    // Process categoria value
+                    let categoriaValue = '';
+                    if (categoria) {
+                      const catStr = String(categoria).toLowerCase();
+                      if (catStr.includes('científ') || catStr.includes('cientif')) {
+                        categoriaValue = 'cientifico';
+                      } else if (catStr.includes('polít') || catStr.includes('polit')) {
+                        categoriaValue = 'politico';
+                      } else if (catStr.includes('social')) {
+                        categoriaValue = 'social';
+                      } else if (catStr.includes('outro') || catStr.includes('other')) {
+                        categoriaValue = 'outro';
+                      }
+                    }
+                    
+                    // Process date value
+                    let nascimentoValue = '';
+                    if (nascimento) {
+                      const nascStr = String(nascimento).trim();
+                      // Check if it's a number (Excel serial date)
+                      if (!isNaN(nascStr) && nascStr.length < 10) {
+                        // Convert Excel serial date to JavaScript date
+                        const excelDate = parseFloat(nascStr);
+                        const jsDate = new Date((excelDate - 25569) * 86400 * 1000);
+                        const year = jsDate.getFullYear();
+                        const month = String(jsDate.getMonth() + 1).padStart(2, '0');
+                        const day = String(jsDate.getDate()).padStart(2, '0');
+                        nascimentoValue = `${year}-${month}-${day}`;
+                      } else if (nascStr.includes('/')) {
+                        // Handle DD/MM/YYYY or DD/MM/YY format
+                        const parts = nascStr.split('/');
+                        if (parts.length === 3) {
+                          let year = parts[2];
+                          if (year.length === 2) {
+                            year = (parseInt(year) > 50 ? '19' : '20') + year;
+                          }
+                          nascimentoValue = `${year}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                        }
+                      } else if (nascStr.includes('-')) {
+                        // Already in YYYY-MM-DD format
+                        nascimentoValue = nascStr;
+                      }
+                    }
+                    
                     guest = {
                       nome: String(nome).trim(),
                       cargo: String(cargo).trim(),
+                      categoria: categoriaValue,
                       email: email ? String(email).trim() : '',
                       telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
                       whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      nascimento: nascimentoValue,
+                      endereco: endereco ? String(endereco).trim() : '',
                       enviado: false,
                       recebido: false,
                       confirmado: false,
@@ -3399,12 +3493,47 @@
                       }
                     }
                     
+                    // Import all available fields from the file
+                    const nascimento = findColumn(row, ['nascimento', 'data de nascimento', 'birth', 'birthday', 'data_nascimento']);
+                    const endereco = findColumn(row, ['endereço', 'endereco', 'address', 'rua']);
+                    
+                    // Process date value
+                    let nascimentoValue = '';
+                    if (nascimento) {
+                      const nascStr = String(nascimento).trim();
+                      // Check if it's a number (Excel serial date)
+                      if (!isNaN(nascStr) && nascStr.length < 10) {
+                        // Convert Excel serial date to JavaScript date
+                        const excelDate = parseFloat(nascStr);
+                        const jsDate = new Date((excelDate - 25569) * 86400 * 1000);
+                        const year = jsDate.getFullYear();
+                        const month = String(jsDate.getMonth() + 1).padStart(2, '0');
+                        const day = String(jsDate.getDate()).padStart(2, '0');
+                        nascimentoValue = `${year}-${month}-${day}`;
+                      } else if (nascStr.includes('/')) {
+                        // Handle DD/MM/YYYY or DD/MM/YY format
+                        const parts = nascStr.split('/');
+                        if (parts.length === 3) {
+                          let year = parts[2];
+                          if (year.length === 2) {
+                            year = (parseInt(year) > 50 ? '19' : '20') + year;
+                          }
+                          nascimentoValue = `${year}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                        }
+                      } else if (nascStr.includes('-')) {
+                        // Already in YYYY-MM-DD format
+                        nascimentoValue = nascStr;
+                      }
+                    }
+                    
                     guest = {
                       nome: String(nome).trim(),
                       categoria: categoriaValue,
                       email: email ? String(email).trim() : '',
                       telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
                       whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      nascimento: nascimentoValue,
+                      endereco: endereco ? String(endereco).trim() : '',
                       enviado: false,
                       recebido: false,
                       confirmado: false,
