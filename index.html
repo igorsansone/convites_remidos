@@ -1742,9 +1742,12 @@
                 <tr>
                   <th>Nome</th>
                   <th>Cargo/Instituição</th>
+                  <th>Categoria</th>
                   <th>E-mail</th>
                   <th>Telefone</th>
                   <th>WhatsApp</th>
+                  <th>Nascimento</th>
+                  <th>Endereço</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -1912,6 +1915,8 @@
                   <th>E-mail</th>
                   <th>Telefone</th>
                   <th>WhatsApp</th>
+                  <th>Nascimento</th>
+                  <th>Endereço</th>
                   <th>Convite Enviado</th>
                   <th>Recebimento</th>
                   <th>Presença</th>
@@ -2697,6 +2702,13 @@
           thirdColumn = guest.categoria ? (categoriaLabels[guest.categoria] || guest.categoria) : '-';
         } else if (type === 'autoridades') {
           secondColumn = guest.cargo;
+          const categoriaLabels = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social',
+            'outro': 'Outro'
+          };
+          thirdColumn = guest.categoria ? (categoriaLabels[guest.categoria] || guest.categoria) : '-';
         } else if (type === 'honra') {
           const categorias = {
             'cientifico': 'Científica',
@@ -2731,7 +2743,7 @@
         
         // Format birth date if available
         let nascimentoFormatted = '-';
-        if (type === 'remidos' && guest.nascimento) {
+        if (guest.nascimento) {
           try {
             const date = new Date(guest.nascimento);
             nascimentoFormatted = date.toLocaleDateString('pt-BR');
@@ -2779,9 +2791,12 @@
           row.innerHTML = `
             <td>${guest.nome}</td>
             <td>${secondColumn}</td>
+            <td>${thirdColumn}</td>
             <td>${guest.email || '-'}</td>
             <td>${guest.telefone || '-'}</td>
             <td>${guest.whatsapp || '-'}</td>
+            <td>${nascimentoFormatted}</td>
+            <td>${guest.endereco || '-'}</td>
             <td>
               <select class="status-select" onchange="updateStatus('${type}', ${index}, 'enviado', this.value)">
                 <option value="false" ${!guest.enviado ? 'selected' : ''}>Não Enviado</option>
@@ -2863,8 +2878,26 @@
             ${guest.endereco ? `<div class="guest-detail">📍 Endereço: ${guest.endereco}</div>` : ''}
           `;
         } else if (type === 'autoridades') {
+          const categoriaLabels = {
+            'cientifico': 'Científica',
+            'politico': 'Política',
+            'social': 'Social',
+            'outro': 'Outro'
+          };
+          let nascimentoStr = '';
+          if (guest.nascimento) {
+            try {
+              const date = new Date(guest.nascimento);
+              nascimentoStr = date.toLocaleDateString('pt-BR');
+            } catch (e) {
+              nascimentoStr = guest.nascimento;
+            }
+          }
           detailsHTML = `
             <div class="guest-detail"><span class="icon-briefcase"></span> ${guest.cargo || 'Cargo não informado'}</div>
+            ${guest.categoria ? `<div class="guest-detail">🏷️ Categoria: ${categoriaLabels[guest.categoria] || guest.categoria}</div>` : ''}
+            ${nascimentoStr ? `<div class="guest-detail">🎂 Nascimento: ${nascimentoStr}</div>` : ''}
+            ${guest.endereco ? `<div class="guest-detail">📍 Endereço: ${guest.endereco}</div>` : ''}
           `;
         } else if (type === 'honra') {
           const categoriaLabels = {
@@ -2872,8 +2905,19 @@
             'politico': 'Política',
             'social': 'Social'
           };
+          let nascimentoStr = '';
+          if (guest.nascimento) {
+            try {
+              const date = new Date(guest.nascimento);
+              nascimentoStr = date.toLocaleDateString('pt-BR');
+            } catch (e) {
+              nascimentoStr = guest.nascimento;
+            }
+          }
           detailsHTML = `
             <div class="guest-detail"><span class="icon-trophy"></span> ${categoriaLabels[guest.categoria] || guest.categoria}</div>
+            ${nascimentoStr ? `<div class="guest-detail">🎂 Nascimento: ${nascimentoStr}</div>` : ''}
+            ${guest.endereco ? `<div class="guest-detail">📍 Endereço: ${guest.endereco}</div>` : ''}
           `;
         }
         
