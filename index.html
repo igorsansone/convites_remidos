@@ -1476,8 +1476,8 @@
               <input type="file" id="remidosExcelFile" accept=".xlsx,.xls,.csv" style="padding: 8px; background: white; border: 2px solid #e0e0e0; border-radius: 8px;">
               <small style="display: block; margin-top: 5px; color: #78909c; font-size: 0.85em;">
                 <strong>Formatos aceitos:</strong> Excel (.xlsx, .xls) ou CSV (.csv)<br>
-                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: <strong>nome</strong> e <strong>cro</strong> (obrigatórias). Demais campos serão ignorados na importação.<br>
-                <strong>Como usar:</strong> Selecione o arquivo e apenas nome e CRO serão importados automaticamente. Outros dados devem ser preenchidos manualmente.<br>
+                <strong>Estrutura esperada:</strong> O arquivo deve conter colunas: <strong>nome</strong> e <strong>cro</strong> (obrigatórias). Campos opcionais (categoria, email, telefone, nascimento, endereço) serão importados se presentes.<br>
+                <strong>Como usar:</strong> Selecione o arquivo e todos os campos disponíveis serão importados automaticamente.<br>
                 <a href="#" onclick="downloadTemplate('remidos'); return false;" style="color: #1a237e; font-weight: bold;">⬇️ Baixar modelo de exemplo</a>
               </small>
             </div>
@@ -3242,6 +3242,45 @@
                 return '';
               };
               
+              // Helper function to check if a column exists in the data
+              const hasColumn = (data, possibleNames) => {
+                if (data.length === 0) return false;
+                const firstRow = data[0];
+                for (let key in firstRow) {
+                  if (possibleNames.some(name => key.toLowerCase().includes(name.toLowerCase()))) {
+                    return true;
+                  }
+                }
+                return false;
+              };
+              
+              // Validate mandatory columns for each type
+              if (type === 'remidos') {
+                const hasNome = hasColumn(jsonData, ['nome', 'name']);
+                const hasCro = hasColumn(jsonData, ['nº cro', 'cro', 'numero cro', 'cro/rs']);
+                
+                if (!hasNome || !hasCro) {
+                  let missingColumns = [];
+                  if (!hasNome) missingColumns.push('nome');
+                  if (!hasCro) missingColumns.push('cro');
+                  alert(`❌ Erro: O arquivo não contém as colunas obrigatórias: ${missingColumns.join(', ')}.\n\nPor favor, certifique-se de que o arquivo contém as colunas "nome" e "cro".`);
+                  fileInput.value = '';
+                  return;
+                }
+              } else if (type === 'autoridades') {
+                const hasNome = hasColumn(jsonData, ['nome', 'name']);
+                const hasCargo = hasColumn(jsonData, ['cargo', 'instituição', 'instituicao', 'position']);
+                
+                if (!hasNome || !hasCargo) {
+                  let missingColumns = [];
+                  if (!hasNome) missingColumns.push('nome');
+                  if (!hasCargo) missingColumns.push('cargo');
+                  alert(`❌ Erro: O arquivo não contém as colunas obrigatórias: ${missingColumns.join(', ')}.\n\nPor favor, certifique-se de que o arquivo contém as colunas "nome" e "cargo".`);
+                  fileInput.value = '';
+                  return;
+                }
+              }
+              
               jsonData.forEach((row, index) => {
                 try {
                   const nome = findColumn(row, ['nome', 'name']);
@@ -3263,16 +3302,64 @@
                       return;
                     }
                     
-                    // For Remidos, only auto-fill name and CRO number, ignoring other fields
+                    // Import all available fields from the file
+                    const categoria = findColumn(row, ['categoria', 'category']);
+                    const nascimento = findColumn(row, ['nascimento', 'data de nascimento', 'birth', 'birthday', 'data_nascimento']);
+                    const endereco = findColumn(row, ['endereço', 'endereco', 'address', 'rua']);
+                    
+                    // Process categoria value
+                    let categoriaValue = '';
+                    if (categoria) {
+                      const catStr = String(categoria).toLowerCase();
+                      if (catStr.includes('científ') || catStr.includes('cientif')) {
+                        categoriaValue = 'cientifico';
+                      } else if (catStr.includes('polít') || catStr.includes('polit')) {
+                        categoriaValue = 'politico';
+                      } else if (catStr.includes('social')) {
+                        categoriaValue = 'social';
+                      } else if (catStr.includes('outro') || catStr.includes('other')) {
+                        categoriaValue = 'outro';
+                      }
+                    }
+                    
+                    // Process date value
+                    let nascimentoValue = '';
+                    if (nascimento) {
+                      const nascStr = String(nascimento).trim();
+                      // Check if it's a number (Excel serial date)
+                      if (!isNaN(nascStr) && nascStr.length < 10) {
+                        // Convert Excel serial date to JavaScript date
+                        const excelDate = parseFloat(nascStr);
+                        const jsDate = new Date((excelDate - 25569) * 86400 * 1000);
+                        const year = jsDate.getFullYear();
+                        const month = String(jsDate.getMonth() + 1).padStart(2, '0');
+                        const day = String(jsDate.getDate()).padStart(2, '0');
+                        nascimentoValue = `${year}-${month}-${day}`;
+                      } else if (nascStr.includes('/')) {
+                        // Handle DD/MM/YYYY or DD/MM/YY format
+                        const parts = nascStr.split('/');
+                        if (parts.length === 3) {
+                          let year = parts[2];
+                          if (year.length === 2) {
+                            year = (parseInt(year) > 50 ? '19' : '20') + year;
+                          }
+                          nascimentoValue = `${year}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                        }
+                      } else if (nascStr.includes('-')) {
+                        // Already in YYYY-MM-DD format
+                        nascimentoValue = nascStr;
+                      }
+                    }
+                    
                     guest = {
                       nome: String(nome).trim(),
                       cro: String(cro).trim(),
-                      categoria: '',
-                      email: '',
-                      telefone: '',
-                      whatsapp: '',
-                      nascimento: '',
-                      endereco: '',
+                      categoria: categoriaValue,
+                      email: email ? String(email).trim() : '',
+                      telefone: telefone ? String(telefone).trim() : whatsapp ? String(whatsapp).trim() : '',
+                      whatsapp: whatsapp ? String(whatsapp).trim() : telefone ? String(telefone).trim() : '',
+                      nascimento: nascimentoValue,
+                      endereco: endereco ? String(endereco).trim() : '',
                       enviado: false,
                       recebido: false,
                       confirmado: false,
